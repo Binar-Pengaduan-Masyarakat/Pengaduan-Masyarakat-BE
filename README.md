@@ -56,7 +56,7 @@ git push -u origin develop
 fungsi: untuk menambahkan code teman-teman kerepository
 
 
->[!WARNING] :
+>[!WARNING] 
 > Usaha-in sebelum di push, teman-teman pull dulu ya agar nantinya code teman kita tidak hilang (tertimpa oleh kodingan kita), Oke 
 
 >[!IMPORTANT]
