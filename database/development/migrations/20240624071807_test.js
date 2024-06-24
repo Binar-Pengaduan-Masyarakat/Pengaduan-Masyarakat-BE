@@ -6,7 +6,7 @@ exports.up = function (knex) {
   return knex.schema
     .createTable("User", (table) => {
       table.string("userId", 255).primary();
-      table.boolean("hasImage").defaultTo(false);
+      table.string("userImage", 255);
       table.string("name", 255);
       table.string("email", 255).unique();
       table.string("password", 255);
@@ -19,9 +19,9 @@ exports.up = function (knex) {
       DECLARE
         max_id INTEGER;
       BEGIN
-        SELECT COALESCE(MAX(CAST(SUBSTRING("userId", 7) AS INTEGER)), 0) INTO max_id FROM "User"
-        WHERE SUBSTRING("userId", 1, 6) = CONCAT(UPPER(SUBSTRING(NEW.roles, 1, 2)), to_char(NEW."createdAt", 'MMYY'));
-        NEW."userId" := CONCAT(UPPER(SUBSTRING(NEW.roles, 1, 2)), to_char(NEW."createdAt", 'MMYY'), (max_id + 1)::TEXT); 
+        SELECT COALESCE(MAX(CAST(SUBSTRING("userId", 3) AS INTEGER)), 0) INTO max_id FROM "User"
+        WHERE SUBSTRING("userId", 1, 2) = UPPER(SUBSTRING(NEW.roles, 1, 2));
+        NEW."userId" := CONCAT(UPPER(SUBSTRING(NEW.roles, 1, 2)), (max_id + 1)::TEXT); 
         RETURN NEW;
       END;
       $$ LANGUAGE plpgsql;
@@ -121,7 +121,7 @@ exports.up = function (knex) {
     .createTable("UserReport", (table) => {
       table.string("reportId", 255).primary();
       table.text("reportContent");
-      table.boolean("hasImage").defaultTo(false);
+      table.string("reportImage", 255);
       table
         .string("categoryId", 255)
         .references("categoryId")
@@ -143,9 +143,8 @@ exports.up = function (knex) {
       DECLARE
         max_id INTEGER;
       BEGIN
-        SELECT COALESCE(MAX(CAST(SUBSTRING("reportId", 7) AS INTEGER)), 0) INTO max_id FROM "UserReport"
-        WHERE SUBSTRING("reportId", 1, 6) = CONCAT('UR', to_char(NEW."createdAt", 'MMYY'));
-        NEW."reportId" := CONCAT('UR', to_char(NEW."createdAt", 'MMYY'), (max_id + 1)::TEXT);
+        SELECT COALESCE(MAX(CAST(SUBSTRING("reportId", 3) AS INTEGER)), 0) INTO max_id FROM "UserReport";
+        NEW."reportId" := CONCAT('UR', (max_id + 1)::TEXT);
         RETURN NEW;
       END;
       $$ LANGUAGE plpgsql;
@@ -192,6 +191,7 @@ exports.up = function (knex) {
       `
       CREATE TRIGGER before_reportresponse_insert
       BEFORE INSERT ON "ReportResponse"
+
       FOR EACH ROW
       EXECUTE PROCEDURE check_reportresponse();
     `
@@ -202,9 +202,8 @@ exports.up = function (knex) {
       DECLARE
         max_id INTEGER;
       BEGIN
-        SELECT COALESCE(MAX(CAST(SUBSTRING("responseId", 7) AS INTEGER)), 0) INTO max_id FROM "ReportResponse"
-        WHERE SUBSTRING("responseId", 1, 6) = CONCAT('RR', to_char((SELECT "createdAt" FROM "UserReport" WHERE "reportId" = NEW."reportId"), 'MMYY'));
-        NEW."responseId" := CONCAT('RR', to_char((SELECT "createdAt" FROM "UserReport" WHERE "reportId" = NEW."reportId"), 'MMYY'), (max_id + 1)::TEXT); 
+        SELECT COALESCE(MAX(CAST(SUBSTRING("responseId", 3) AS INTEGER)), 0) INTO max_id FROM "ReportResponse";
+        NEW."responseId" := CONCAT('RR', (max_id + 1)::TEXT); 
         RETURN NEW;
       END;
       $$ LANGUAGE plpgsql;
@@ -232,7 +231,7 @@ exports.up = function (knex) {
         .inTable("User")
         .onDelete("CASCADE");
       table.text("resultContent");
-      table.boolean("hasImage").defaultTo(false);
+      table.string("resultImage", 255);
       table.timestamp("resultDate").defaultTo(knex.fn.now());
       table.unique(["reportId", "userId"]);
     })

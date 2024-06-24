@@ -30,28 +30,28 @@ exports.seed = async function (knex) {
   // Insert seed data with specific IDs
   await knex("User").insert([
     {
-      userId: "US06241",
+      userId: "US1",
       name: "Asep",
       email: "asep@example.com",
       password: "asepganteng",
       roles: "USER",
     },
     {
-      userId: "US06242",
+      userId: "US2",
       name: "Alice",
       email: "alice@example.com",
       password: "pass123",
       roles: "USER",
     },
     {
-      userId: "IN06241",
+      userId: "IN1",
       name: "Bob",
       email: "bob@example.com",
       password: "securepwd",
       roles: "INSTITUTION",
     },
     {
-      userId: "SU06241",
+      userId: "SU1",
       name: "Charlie",
       email: "charlie@example.com",
       password: "admin123",
@@ -66,15 +66,15 @@ exports.seed = async function (knex) {
   ]);
 
   await knex("UserCategory").insert([
-    { userCategoryId: "UC1", categoryId: "CA1", userId: "IN06241" },
+    { userCategoryId: "UC1", categoryId: "CA1", userId: "IN1" },
   ]);
 
   await knex("UserReport").insert([
     {
-      reportId: "UR06241",
+      reportId: "UR1",
       reportContent: "Pothole on Main St",
       categoryId: "CA1",
-      userId: "US06241",
+      userId: "US1",
       district: "District A",
       subdistrict: "Subdistrict 1",
       address: "123 Main St",
@@ -82,20 +82,20 @@ exports.seed = async function (knex) {
   ]);
 
   await knex("ReportResponse").insert([
-    { responseId: "RR06241", reportId: "UR06241", userId: "IN06241" },
+    { responseId: "RR1", reportId: "UR1", userId: "IN1" },
   ]);
 
   await knex("ReportResult").insert([
     {
       resultId: "RE1",
-      reportId: "UR06241",
-      userId: "IN06241",
+      reportId: "UR1",
+      userId: "IN1",
       resultContent: "Issue resolved - pothole filled.",
     },
   ]);
 
   await knex("SameReporter").insert([
-    { sameReporterId: "SR1", reportId: "UR06241", userId: "US06241" },
+    { sameReporterId: "SR1", reportId: "UR1", userId: "US1" },
   ]);
 
   // Re-enable triggers for all tables
