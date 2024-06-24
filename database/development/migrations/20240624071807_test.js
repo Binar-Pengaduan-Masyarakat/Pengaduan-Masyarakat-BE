@@ -179,9 +179,10 @@ exports.up = function (knex) {
       `
       CREATE OR REPLACE FUNCTION check_reportresponse() RETURNS TRIGGER AS $$
       BEGIN
-        IF EXISTS (SELECT 1 FROM "ReportResponse" WHERE "reportId" = NEW."reportId" AND "userId" = NEW."userId") THEN
-          RAISE EXCEPTION 'The same user cannot respond to the same report more than once';
+        IF EXISTS (SELECT 1 FROM "ReportResponse" WHERE "reportId" = NEW."reportId") THEN
+          RAISE EXCEPTION 'The same report cannot have more than one response';
         END IF;
+        
         RETURN NEW;
       END;
       $$ LANGUAGE plpgsql;
@@ -239,8 +240,8 @@ exports.up = function (knex) {
       `
       CREATE OR REPLACE FUNCTION check_reportresult() RETURNS TRIGGER AS $$
       BEGIN
-        IF EXISTS (SELECT 1 FROM "ReportResult" WHERE "reportId" = NEW."reportId" AND "userId" = NEW."userId") THEN
-          RAISE EXCEPTION 'The same user cannot create more than one result for the same report';
+        IF EXISTS (SELECT 1 FROM "ReportResult" WHERE "reportId" = NEW."reportId") THEN
+          RAISE EXCEPTION 'The same report cannot have more than one result';
         END IF;
         RETURN NEW;
       END;
