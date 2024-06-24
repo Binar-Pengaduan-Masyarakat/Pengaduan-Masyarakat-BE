@@ -7,48 +7,51 @@ module.exports = {
   development: {
     client: "pg",
     connection: {
-      database: "my_db",
-      user: "username",
-      password: "password",
-    },
-    pool: {
-      min: 2,
-      max: 10,
+      host: "localhost",
+      port: 5432,
+      user: "postgres",
+      password: "postgres",
+      database: "pengaduan-masyarakat-dev",
     },
     migrations: {
-      tableName: "knex_migrations",
+      directory: "./database/development/migrations",
+    },
+    seeds: {
+      directory: "./database/development/seeds",
     },
   },
 
   staging: {
-    client: "postgresql",
+    client: "pg",
     connection: {
-      database: "my_db",
-      user: "username",
-      password: "password",
-    },
-    pool: {
-      min: 2,
-      max: 10,
+      host: "localhost",
+      port: 5432,
+      user: "postgres",
+      password: "postgres",
+      database: "pengaduan-masyarakat-stg",
     },
     migrations: {
-      tableName: "knex_migrations",
+      directory: "./database/staging/migrations",
+    },
+    seeds: {
+      directory: "./database/staging/seeds",
     },
   },
 
   production: {
-    client: "postgresql",
+    client: "pg",
     connection: {
-      database: "my_db",
-      user: "username",
-      password: "password",
-    },
-    pool: {
-      min: 2,
-      max: 10,
+      host: "localhost",
+      port: 5432,
+      user: "postgres",
+      password: "postgres",
+      database: "pengaduan-masyarakat",
     },
     migrations: {
-      tableName: "knex_migrations",
+      directory: "./database/release/migrations",
+    },
+    seeds: {
+      directory: "./database/release/seeds",
     },
   },
 };
