@@ -7,10 +7,10 @@ exports.up = function (knex) {
     .createTable("User", (table) => {
       table.string("userId", 255).primary();
       table.string("userImage", 255);
-      table.string("name", 255);
-      table.string("email", 255).unique();
-      table.string("password", 255);
-      table.string("roles", 255).checkIn(["USER", "INSTITUTION", "SUPERADMIN"]);
+      table.string("name", 255).notNullable();
+      table.string("email", 255).unique().notNullable();
+      table.string("password", 255).notNullable();
+      table.enum("roles", ["USER", "INSTITUTION", "SUPERADMIN"]).notNullable();
       table.timestamp("createdAt").defaultTo(knex.fn.now());
     })
     .raw(
@@ -38,7 +38,7 @@ exports.up = function (knex) {
 
     .createTable("Category", (table) => {
       table.string("categoryId", 255).primary();
-      table.string("categoryName", 255).unique();
+      table.string("categoryName", 255).unique().notNullable();
     })
     .raw(
       `
@@ -68,12 +68,14 @@ exports.up = function (knex) {
         .string("categoryId", 255)
         .references("categoryId")
         .inTable("Category")
-        .onDelete("CASCADE");
+        .onDelete("CASCADE")
+        .notNullable();
       table
         .string("userId", 255)
         .references("userId")
         .inTable("User")
-        .onDelete("CASCADE");
+        .onDelete("CASCADE")
+        .notNullable();
       table.unique(["categoryId", "userId"]);
     })
     .raw(
@@ -120,21 +122,23 @@ exports.up = function (knex) {
 
     .createTable("UserReport", (table) => {
       table.string("reportId", 255).primary();
-      table.text("reportContent");
+      table.string("reportContent", 255).notNullable();
       table.string("reportImage", 255);
       table
         .string("categoryId", 255)
         .references("categoryId")
         .inTable("Category")
-        .onDelete("CASCADE");
+        .onDelete("CASCADE")
+        .notNullable();
       table
         .string("userId", 255)
         .references("userId")
         .inTable("User")
-        .onDelete("CASCADE");
-      table.string("district", 255);
-      table.string("subdistrict", 255);
-      table.string("address", 255);
+        .onDelete("CASCADE")
+        .notNullable();
+      table.string("district", 255).notNullable();
+      table.string("subdistrict", 255).notNullable();
+      table.string("address", 255).notNullable();
       table.timestamp("createdAt").defaultTo(knex.fn.now());
     })
     .raw(
@@ -165,12 +169,14 @@ exports.up = function (knex) {
         .string("reportId", 255)
         .references("reportId")
         .inTable("UserReport")
-        .onDelete("CASCADE");
+        .onDelete("CASCADE")
+        .notNullable();
       table
         .string("userId", 255)
         .references("userId")
         .inTable("User")
-        .onDelete("CASCADE");
+        .onDelete("CASCADE")
+        .notNullable();
       table.timestamp("responseDate").defaultTo(knex.fn.now());
       table.unique(["reportId", "userId"]);
     })
@@ -191,7 +197,6 @@ exports.up = function (knex) {
       `
       CREATE TRIGGER before_reportresponse_insert
       BEFORE INSERT ON "ReportResponse"
-
       FOR EACH ROW
       EXECUTE PROCEDURE check_reportresponse();
     `
@@ -224,13 +229,15 @@ exports.up = function (knex) {
         .string("reportId", 255)
         .references("reportId")
         .inTable("UserReport")
-        .onDelete("CASCADE");
+        .onDelete("CASCADE")
+        .notNullable();
       table
         .string("userId", 255)
         .references("userId")
         .inTable("User")
-        .onDelete("CASCADE");
-      table.text("resultContent");
+        .onDelete("CASCADE")
+        .notNullable();
+      table.string("resultContent", 255).notNullable();
       table.string("resultImage", 255);
       table.timestamp("resultDate").defaultTo(knex.fn.now());
       table.unique(["reportId", "userId"]);
@@ -283,12 +290,14 @@ exports.up = function (knex) {
         .string("reportId", 255)
         .references("reportId")
         .inTable("UserReport")
-        .onDelete("CASCADE");
+        .onDelete("CASCADE")
+        .notNullable();
       table
         .string("userId", 255)
         .references("userId")
         .inTable("User")
-        .onDelete("CASCADE");
+        .onDelete("CASCADE")
+        .notNullable();
       table.unique(["reportId", "userId"]);
     })
     .raw(
