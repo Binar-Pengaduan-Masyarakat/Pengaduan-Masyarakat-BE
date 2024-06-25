@@ -3,18 +3,21 @@
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-  return knex.schema
-    .createTable("User", (table) => {
-      table.string("userId", 255).primary();
-      table.string("userImage", 255);
-      table.string("name", 255).notNullable();
-      table.string("email", 255).unique().notNullable();
-      table.string("password", 255).notNullable();
-      table.enum("roles", ["USER", "INSTITUTION", "SUPERADMIN"]).notNullable();
-      table.timestamp("createdAt").defaultTo(knex.fn.now());
-    })
-    .raw(
-      `
+  return (
+    knex.schema
+      .createTable("User", (table) => {
+        table.string("userId", 255).primary();
+        table.string("userImage", 255);
+        table.string("name", 255).notNullable();
+        table.string("email", 255).unique().notNullable();
+        table.string("password", 255).notNullable();
+        table
+          .enum("roles", ["USER", "INSTITUTION", "SUPERADMIN"])
+          .notNullable();
+        table.timestamp("createdAt").defaultTo(knex.fn.now());
+      })
+      .raw(
+        `
       CREATE OR REPLACE FUNCTION set_user_id() RETURNS TRIGGER AS $$
       DECLARE
         max_id INTEGER;
@@ -26,22 +29,22 @@ exports.up = function (knex) {
       END;
       $$ LANGUAGE plpgsql;
     `
-    )
-    .raw(
-      `
+      )
+      .raw(
+        `
       CREATE TRIGGER before_user_insert
       BEFORE INSERT ON "User"
       FOR EACH ROW
       EXECUTE PROCEDURE set_user_id();
     `
-    )
+      )
 
-    .createTable("Category", (table) => {
-      table.string("categoryId", 255).primary();
-      table.string("categoryName", 255).unique().notNullable();
-    })
-    .raw(
-      `
+      .createTable("Category", (table) => {
+        table.string("categoryId", 255).primary();
+        table.string("categoryName", 255).unique().notNullable();
+      })
+      .raw(
+        `
       CREATE OR REPLACE FUNCTION set_category_id() RETURNS TRIGGER AS $$
       DECLARE
         max_id INTEGER;
@@ -52,34 +55,34 @@ exports.up = function (knex) {
       END;
       $$ LANGUAGE plpgsql;
     `
-    )
-    .raw(
-      `
+      )
+      .raw(
+        `
       CREATE TRIGGER before_category_insert
       BEFORE INSERT ON "Category"
       FOR EACH ROW
       EXECUTE PROCEDURE set_category_id();
     `
-    )
+      )
 
-    .createTable("UserCategory", (table) => {
-      table.string("userCategoryId", 255).primary();
-      table
-        .string("categoryId", 255)
-        .references("categoryId")
-        .inTable("Category")
-        .onDelete("CASCADE")
-        .notNullable();
-      table
-        .string("userId", 255)
-        .references("userId")
-        .inTable("User")
-        .onDelete("CASCADE")
-        .notNullable();
-      table.unique(["categoryId", "userId"]);
-    })
-    .raw(
-      `
+      .createTable("UserCategory", (table) => {
+        table.string("userCategoryId", 255).primary();
+        table
+          .string("categoryId", 255)
+          .references("categoryId")
+          .inTable("Category")
+          .onDelete("CASCADE")
+          .notNullable();
+        table
+          .string("userId", 255)
+          .references("userId")
+          .inTable("User")
+          .onDelete("CASCADE")
+          .notNullable();
+        table.unique(["categoryId", "userId"]);
+      })
+      .raw(
+        `
       CREATE OR REPLACE FUNCTION check_usercategory() RETURNS TRIGGER AS $$
       BEGIN
         IF EXISTS (SELECT 1 FROM "UserCategory" WHERE "categoryId" = NEW."categoryId" AND "userId" = NEW."userId") THEN
@@ -89,17 +92,17 @@ exports.up = function (knex) {
       END;
       $$ LANGUAGE plpgsql;
     `
-    )
-    .raw(
-      `
+      )
+      .raw(
+        `
       CREATE TRIGGER before_usercategory_insert
       BEFORE INSERT ON "UserCategory"
       FOR EACH ROW
       EXECUTE PROCEDURE check_usercategory();
     `
-    )
-    .raw(
-      `
+      )
+      .raw(
+        `
       CREATE OR REPLACE FUNCTION set_usercategory_id() RETURNS TRIGGER AS $$
       DECLARE
         max_id INTEGER;
@@ -110,39 +113,39 @@ exports.up = function (knex) {
       END;
       $$ LANGUAGE plpgsql;
     `
-    )
-    .raw(
-      `
+      )
+      .raw(
+        `
       CREATE TRIGGER before_usercategory_insert_id
       BEFORE INSERT ON "UserCategory"
       FOR EACH ROW
       EXECUTE PROCEDURE set_usercategory_id();
     `
-    )
+      )
 
-    .createTable("UserReport", (table) => {
-      table.string("reportId", 255).primary();
-      table.string("reportContent", 255).notNullable();
-      table.string("reportImage", 255);
-      table
-        .string("categoryId", 255)
-        .references("categoryId")
-        .inTable("Category")
-        .onDelete("CASCADE")
-        .notNullable();
-      table
-        .string("userId", 255)
-        .references("userId")
-        .inTable("User")
-        .onDelete("CASCADE")
-        .notNullable();
-      table.string("district", 255).notNullable();
-      table.string("subdistrict", 255).notNullable();
-      table.string("address", 255).notNullable();
-      table.timestamp("createdAt").defaultTo(knex.fn.now());
-    })
-    .raw(
-      `
+      .createTable("UserReport", (table) => {
+        table.string("reportId", 255).primary();
+        table.string("reportContent", 255).notNullable();
+        table.string("reportImage", 255);
+        table
+          .string("categoryId", 255)
+          .references("categoryId")
+          .inTable("Category")
+          .onDelete("CASCADE")
+          .notNullable();
+        table
+          .string("userId", 255)
+          .references("userId")
+          .inTable("User")
+          .onDelete("CASCADE")
+          .notNullable();
+        table.string("district", 255).notNullable();
+        table.string("subdistrict", 255).notNullable();
+        table.string("address", 255).notNullable();
+        table.timestamp("createdAt").defaultTo(knex.fn.now());
+      })
+      .raw(
+        `
       CREATE OR REPLACE FUNCTION set_userreport_id() RETURNS TRIGGER AS $$
       DECLARE
         max_id INTEGER;
@@ -153,35 +156,35 @@ exports.up = function (knex) {
       END;
       $$ LANGUAGE plpgsql;
     `
-    )
-    .raw(
-      `
+      )
+      .raw(
+        `
       CREATE TRIGGER before_userreport_insert
       BEFORE INSERT ON "UserReport"
       FOR EACH ROW
       EXECUTE PROCEDURE set_userreport_id();
     `
-    )
+      )
 
-    .createTable("ReportResponse", (table) => {
-      table.string("responseId", 255).primary();
-      table
-        .string("reportId", 255)
-        .references("reportId")
-        .inTable("UserReport")
-        .onDelete("CASCADE")
-        .notNullable();
-      table
-        .string("userId", 255)
-        .references("userId")
-        .inTable("User")
-        .onDelete("CASCADE")
-        .notNullable();
-      table.timestamp("responseDate").defaultTo(knex.fn.now());
-      table.unique(["reportId", "userId"]);
-    })
-    .raw(
-      `
+      .createTable("ReportResponse", (table) => {
+        table.string("responseId", 255).primary();
+        table
+          .string("reportId", 255)
+          .references("reportId")
+          .inTable("UserReport")
+          .onDelete("CASCADE")
+          .notNullable();
+        table
+          .string("userId", 255)
+          .references("userId")
+          .inTable("User")
+          .onDelete("CASCADE")
+          .notNullable();
+        table.timestamp("responseDate").defaultTo(knex.fn.now());
+        table.unique(["reportId", "userId"]);
+      })
+      .raw(
+        `
       CREATE OR REPLACE FUNCTION check_reportresponse() RETURNS TRIGGER AS $$
       BEGIN
         IF EXISTS (SELECT 1 FROM "ReportResponse" WHERE "reportId" = NEW."reportId") THEN
@@ -192,17 +195,17 @@ exports.up = function (knex) {
       END;
       $$ LANGUAGE plpgsql;
     `
-    )
-    .raw(
-      `
+      )
+      .raw(
+        `
       CREATE TRIGGER before_reportresponse_insert
       BEFORE INSERT ON "ReportResponse"
       FOR EACH ROW
       EXECUTE PROCEDURE check_reportresponse();
     `
-    )
-    .raw(
-      `
+      )
+      .raw(
+        `
       CREATE OR REPLACE FUNCTION set_reportresponse_id() RETURNS TRIGGER AS $$
       DECLARE
         max_id INTEGER;
@@ -213,37 +216,37 @@ exports.up = function (knex) {
       END;
       $$ LANGUAGE plpgsql;
     `
-    )
-    .raw(
-      `
+      )
+      .raw(
+        `
       CREATE TRIGGER before_reportresponse_insert_id
       BEFORE INSERT ON "ReportResponse"
       FOR EACH ROW
       EXECUTE PROCEDURE set_reportresponse_id();
     `
-    )
+      )
 
-    .createTable("ReportResult", (table) => {
-      table.string("resultId", 255).primary();
-      table
-        .string("reportId", 255)
-        .references("reportId")
-        .inTable("UserReport")
-        .onDelete("CASCADE")
-        .notNullable();
-      table
-        .string("userId", 255)
-        .references("userId")
-        .inTable("User")
-        .onDelete("CASCADE")
-        .notNullable();
-      table.string("resultContent", 255).notNullable();
-      table.string("resultImage", 255);
-      table.timestamp("resultDate").defaultTo(knex.fn.now());
-      table.unique(["reportId", "userId"]);
-    })
-    .raw(
-      `
+      .createTable("ReportResult", (table) => {
+        table.string("resultId", 255).primary();
+        table
+          .string("reportId", 255)
+          .references("reportId")
+          .inTable("UserReport")
+          .onDelete("CASCADE")
+          .notNullable();
+        table
+          .string("userId", 255)
+          .references("userId")
+          .inTable("User")
+          .onDelete("CASCADE")
+          .notNullable();
+        table.string("resultContent", 255).notNullable();
+        table.string("resultImage", 255);
+        table.timestamp("resultDate").defaultTo(knex.fn.now());
+        table.unique(["reportId", "userId"]);
+      })
+      .raw(
+        `
       CREATE OR REPLACE FUNCTION check_reportresult() RETURNS TRIGGER AS $$
       BEGIN
         IF EXISTS (SELECT 1 FROM "ReportResult" WHERE "reportId" = NEW."reportId") THEN
@@ -253,17 +256,17 @@ exports.up = function (knex) {
       END;
       $$ LANGUAGE plpgsql;
     `
-    )
-    .raw(
-      `
+      )
+      .raw(
+        `
       CREATE TRIGGER before_reportresult_insert
       BEFORE INSERT ON "ReportResult"
       FOR EACH ROW
       EXECUTE PROCEDURE check_reportresult();
     `
-    )
-    .raw(
-      `
+      )
+      .raw(
+        `
       CREATE OR REPLACE FUNCTION set_result_id() RETURNS TRIGGER AS $$
       DECLARE
         max_id INTEGER;
@@ -274,34 +277,34 @@ exports.up = function (knex) {
       END;
       $$ LANGUAGE plpgsql;
     `
-    )
-    .raw(
-      `
+      )
+      .raw(
+        `
       CREATE TRIGGER before_result_insert
       BEFORE INSERT ON "ReportResult"
       FOR EACH ROW
       EXECUTE PROCEDURE set_result_id(); 
     `
-    )
+      )
 
-    .createTable("SameReporter", (table) => {
-      table.string("sameReporterId", 255).primary();
-      table
-        .string("reportId", 255)
-        .references("reportId")
-        .inTable("UserReport")
-        .onDelete("CASCADE")
-        .notNullable();
-      table
-        .string("userId", 255)
-        .references("userId")
-        .inTable("User")
-        .onDelete("CASCADE")
-        .notNullable();
-      table.unique(["reportId", "userId"]);
-    })
-    .raw(
-      `
+      .createTable("SameReporter", (table) => {
+        table.string("sameReporterId", 255).primary();
+        table
+          .string("reportId", 255)
+          .references("reportId")
+          .inTable("UserReport")
+          .onDelete("CASCADE")
+          .notNullable();
+        table
+          .string("userId", 255)
+          .references("userId")
+          .inTable("User")
+          .onDelete("CASCADE")
+          .notNullable();
+        table.unique(["reportId", "userId"]);
+      })
+      .raw(
+        `
       CREATE OR REPLACE FUNCTION check_samereporter() RETURNS TRIGGER AS $$
       BEGIN
         IF EXISTS (SELECT 1 FROM "UserReport" WHERE "reportId" = NEW."reportId" AND "userId" = NEW."userId") THEN
@@ -314,17 +317,17 @@ exports.up = function (knex) {
       END;
       $$ LANGUAGE plpgsql;
     `
-    )
-    .raw(
-      `
+      )
+      .raw(
+        `
       CREATE TRIGGER before_samereporter_insert
       BEFORE INSERT ON "SameReporter"
       FOR EACH ROW
       EXECUTE PROCEDURE check_samereporter();
     `
-    )
-    .raw(
-      `
+      )
+      .raw(
+        `
       CREATE OR REPLACE FUNCTION set_samereporter_id() RETURNS TRIGGER AS $$
       DECLARE
         max_id INTEGER;
@@ -335,15 +338,55 @@ exports.up = function (knex) {
       END;
       $$ LANGUAGE plpgsql;
     `
-    )
-    .raw(
-      `
+      )
+      .raw(
+        `
       CREATE TRIGGER before_samereporter_insert_id
       BEFORE INSERT ON "SameReporter"
       FOR EACH ROW
       EXECUTE PROCEDURE set_samereporter_id();
     `
-    );
+      )
+
+      // Triggers for cascading deletes
+      .raw(
+        `
+      CREATE OR REPLACE FUNCTION delete_reportresult_on_reportresponse_delete() RETURNS TRIGGER AS $$
+      BEGIN
+        DELETE FROM "ReportResult" WHERE "reportId" = OLD."reportId";
+        RETURN OLD;
+      END;
+      $$ LANGUAGE plpgsql;
+    `
+      )
+      .raw(
+        `
+      CREATE TRIGGER after_reportresponse_delete
+      AFTER DELETE ON "ReportResponse"
+      FOR EACH ROW
+      EXECUTE PROCEDURE delete_reportresult_on_reportresponse_delete();
+    `
+      )
+
+      .raw(
+        `
+      CREATE OR REPLACE FUNCTION delete_samereporter_on_reportresult_delete() RETURNS TRIGGER AS $$
+      BEGIN
+        DELETE FROM "SameReporter" WHERE "reportId" = OLD."reportId";
+        RETURN OLD;
+      END;
+      $$ LANGUAGE plpgsql;
+    `
+      )
+      .raw(
+        `
+      CREATE TRIGGER after_reportresult_delete
+      AFTER DELETE ON "ReportResult"
+      FOR EACH ROW
+      EXECUTE PROCEDURE delete_samereporter_on_reportresult_delete();
+    `
+      )
+  );
 };
 
 exports.down = function (knex) {
