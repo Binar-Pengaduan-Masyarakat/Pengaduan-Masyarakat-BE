@@ -1,39 +1,16 @@
 const express = require("express");
-const port = 3500;
-const path = require("path");
-const cookieParser = require("cookie-parser");
-const logger = require("morgan");
-const middleware = require("./middleware/middleware");
-
-const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
+const morgan = require("morgan");
+const chartRoute = require("./routes/chart.route");
+require("dotenv").config();
 
 const app = express();
+const port = process.env.APP_PORT;
 
-// view engine setup
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
-
-app.use(logger("dev"));
+app.use(morgan("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use(chartRoute);
 
-app.listen(port, () => {
-  console.log(`Server Running in http://localhost:${port}`);
-});
-
-// Middleware
-app
-  .use(middleware.errorHandler)
-  .use(middleware.logRequestTime)
-  .use(middleware.authenticate)
-  .use(middleware.notFound)
-  .use(middleware.dataNotFound)
-  .use(middleware.handleServerError);
-
-module.exports = app;
+app.listen(port, () => console.log(`currently running at port ${port}`));
