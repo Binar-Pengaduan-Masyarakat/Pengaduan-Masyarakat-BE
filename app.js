@@ -1,6 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const chartRoute = require("./routes/chart.route");
+const sameReporterRoute = require("./routes/sameReporter.route");
 require("dotenv").config();
 
 const app = express();
@@ -12,5 +13,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 app.use(chartRoute);
+app.use(sameReporterRoute);
 
 app.listen(port, () => console.log(`currently running at port ${port}`));
