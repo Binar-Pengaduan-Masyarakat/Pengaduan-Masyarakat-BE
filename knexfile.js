@@ -1,6 +1,5 @@
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
-const config = require("./config/database");
-
-module.exports = config[process.env.NODE_ENV];
+require("dotenv").config();
+module.exports = require("./config/database")[process.env.NODE_ENV];

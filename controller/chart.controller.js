@@ -3,7 +3,7 @@ const chartModel = require("../models/chart.model");
 const getRoleDataset = async (req, res) => {
   try {
     const roles = ["USER", "INSTITUTION"];
-    const { labels, data } = await chartModel.getRoleUserDataset(roles);
+    const { labels, data } = await chartModel.getRoleDataset(roles);
     if (!data || data.length === 0) {
       throw new Error("no user found");
     }

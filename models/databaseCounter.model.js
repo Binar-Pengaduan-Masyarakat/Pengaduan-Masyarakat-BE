@@ -60,23 +60,27 @@ const findResponseCounts = async () => {
 // MENGHITUNG JUMLAH ReportResult SECARA KESELURUHAN
 const findReportResultCounts = async (userid) => {
   try {
-    const userCategories = await knex("UserCategory")
-      .where({ userId: userid })
-      .select("categoryId");
+    let reportResultCount;
+    if (userid) {
+      const userCategories = await knex("UserCategory")
+        .where({ userId: userid })
+        .select("categoryId");
 
-    const categoryIds = userCategories.map((category) => category.categoryId);
+      const categoryIds = userCategories.map((category) => category.categoryId);
 
-    const reportIds = await knex("UserReport")
-      .whereIn("categoryId", categoryIds)
-      .select("reportId");
+      const reportIds = await knex("UserReport")
+        .whereIn("categoryId", categoryIds)
+        .select("reportId");
 
-    const reportResultCount = await knex("ReportResult")
-      .whereIn(
-        "reportId",
-        reportIds.map((report) => report.reportId)
-      )
-      .count("* as count");
-
+      reportResultCount = await knex("ReportResult")
+        .whereIn(
+          "reportId",
+          reportIds.map((report) => report.reportId)
+        )
+        .count("* as count");
+    } else {
+      reportResultCount = await knex("ReportResult").count("* as count");
+    }
     const totalReportResultCount = reportResultCount[0].count || 0;
     return totalReportResultCount;
   } catch (error) {
