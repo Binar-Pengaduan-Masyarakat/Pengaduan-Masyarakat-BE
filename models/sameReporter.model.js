@@ -2,12 +2,26 @@ const knex = require("knex")(require("../knexfile"));
 
 const checkSameReporterConditions = async (reportId, userId) => {
   try {
-    const [isSubmitted, isPoster] = await Promise.all([
-      knex("SameReporter").where({ reportId, userId }).first(),
-      knex("UserReport").where({ reportId, userId }).first(),
-    ]);
+    const report = await knex("UserReport").where({ reportId }).first();
+    if (!report) {
+      throw new Error("Report not found");
+    }
 
-    return { isSubmitted: !!isSubmitted, isPoster: !!isPoster };
+    const user = await knex("User").where({ userId }).first();
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const existingSameReporter = await knex("SameReporter")
+      .where({ reportId, userId })
+      .first();
+
+    return {
+      canReport: !existingSameReporter,
+      message: existingSameReporter
+        ? "You have already reported this as the same reporter"
+        : "You can report this as the same reporter",
+    };
   } catch (error) {
     console.error("checkSameReporterConditions error:", error);
     throw error;
@@ -16,25 +30,9 @@ const checkSameReporterConditions = async (reportId, userId) => {
 
 const createSameReporter = async (reportId, userId) => {
   try {
-    const { isSubmitted, isPoster } = await checkSameReporterConditions(
-      reportId,
-      userId
-    );
-
-    if (isPoster) {
-      throw new Error("The user cannot report their own report.");
-    }
-
-    if (isSubmitted) {
-      throw new Error(
-        "The user has already submitted a report for this reportId."
-      );
-    }
-
-    const newSameReporter = await knex("SameReporter").insert(
-      { reportId, userId },
-      "*"
-    );
+    const [newSameReporter] = await knex("SameReporter")
+      .insert({ reportId, userId })
+      .returning("*");
     return newSameReporter;
   } catch (error) {
     console.error("createSameReporter error:", error);

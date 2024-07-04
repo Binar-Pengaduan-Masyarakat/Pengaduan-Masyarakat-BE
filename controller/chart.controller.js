@@ -1,62 +1,47 @@
 const chartModel = require("../models/chart.model");
+const { sendResponse, handleError } = require("../utils/responseHandler.util");
 
 const getRoleDataset = async (req, res) => {
   try {
     const roles = ["USER", "INSTITUTION"];
     const { labels, data } = await chartModel.getRoleDataset(roles);
-    if (!data || data.length === 0) {
-      throw new Error("no user found");
-    }
-    res.status(200).json({ labels, data });
-  } catch (err) {
-    console.error("Error fetching user data:", err);
-    res.status(400).json({ error: "Failed to fetch user data" });
+    sendResponse(res, 200, { labels, data });
+  } catch (error) {
+    handleError(res, error, "Failed to fetch role dataset");
   }
 };
 
 const getCategoryDataset = async (req, res) => {
   try {
     const { labels, data } = await chartModel.getUserCategoryDataset();
-    if (!data || data.length === 0) {
-      throw new Error("No data found");
-    }
-    res.status(200).json({ labels, data });
-  } catch (err) {
-    console.error("Error fetching category data:", err);
-    res.status(400).json({ error: "Failed to fetch category data" });
+    sendResponse(res, 200, { labels, data });
+  } catch (error) {
+    handleError(res, error, "Failed to fetch category dataset");
   }
 };
 
 const getReportStatsDataset = async (req, res) => {
   try {
     const { labels, data } = await chartModel.getReportStatsDataset();
-    if (!data || data.length === 0) {
-      throw new Error("No data found");
-    }
-    res.status(200).json({ labels, data });
-  } catch (err) {
-    console.error("Error fetching report summary data:", err);
-    res.status(400).json({ error: "Failed to fetch report summary data" });
+    sendResponse(res, 200, { labels, data });
+  } catch (error) {
+    handleError(res, error, "Failed to fetch report stats dataset");
   }
 };
 
 const getUserReportResponseDataset = async (req, res) => {
   try {
-    const userid = req.params.userid;
+    const { userid } = req.params;
+    const userExists = await chartModel.checkUserExists(userid);
+    if (!userExists) {
+      return sendResponse(res, 404, { message: "User not found" });
+    }
     const { labels, data } = await chartModel.getUserReportResponseDataset(
       userid
     );
-
-    if (!data || data.length === 0) {
-      throw new Error("No data found");
-    }
-
-    res.status(200).json({ labels, data });
-  } catch (err) {
-    console.error("Error fetching user report response data:", err);
-    res
-      .status(400)
-      .json({ error: "Failed to fetch user report response data" });
+    sendResponse(res, 200, { labels, data });
+  } catch (error) {
+    handleError(res, error, "Failed to fetch user report response data");
   }
 };
 

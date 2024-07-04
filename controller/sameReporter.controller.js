@@ -1,34 +1,29 @@
 const sameReporterModel = require("../models/sameReporter.model");
+const { sendResponse, handleError } = require("../utils/responseHandler.util");
 
 const checkSameReporterConditions = async (req, res) => {
   try {
     const { reportId, userId } = req.params;
-
     const conditions = await sameReporterModel.checkSameReporterConditions(
       reportId,
       userId
     );
-
-    res.status(200).json(conditions);
+    sendResponse(res, 200, conditions);
   } catch (error) {
-    console.error("Error checking SameReporter conditions:", error);
-    res.status(500).json({ error: "Failed to check SameReporter conditions" });
+    handleError(res, error, "Failed to check SameReporter conditions");
   }
 };
 
 const postSameReporter = async (req, res) => {
   try {
     const { reportId, userId } = req.body;
-
     const newSameReporter = await sameReporterModel.createSameReporter(
       reportId,
       userId
     );
-
-    res.status(201).json(newSameReporter);
+    sendResponse(res, 201, newSameReporter);
   } catch (error) {
-    console.error("Error posting SameReporter:", error);
-    res.status(400).json({ error: "Failed to post SameReporter" });
+    handleError(res, error, "Failed to post SameReporter");
   }
 };
 

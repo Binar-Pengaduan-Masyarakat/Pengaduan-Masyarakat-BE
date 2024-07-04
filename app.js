@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-app.use(chartRoute);
-app.use(sameReporterRoute);
+app.use("/api", chartRoute);
+app.use("/api", sameReporterRoute);
 
-app.listen(port, () => console.log(`currently running at port ${port}`));
+app.listen(port, () => console.log(`Server running on port ${port}`));
