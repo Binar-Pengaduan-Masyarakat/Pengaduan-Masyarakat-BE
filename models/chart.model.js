@@ -1,4 +1,4 @@
-const knex = require("knex")(require("../knexfile"));
+const knex = require("knex")(require("../knexfile")());
 const databaseCounter = require("./databaseCounter.model");
 
 const checkUserExists = async (userId) => {
