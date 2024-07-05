@@ -1,8 +1,10 @@
 const request = require("supertest");
 const app = require("../app");
 const knex = require("knex")(require("../knexfile")("test"));
+const databaseSetup = require("../utils/databaseSetup.util");
 
 beforeAll(async () => {
+  await databaseSetup();
   await knex.migrate.latest();
   await knex.seed.run();
 });
