@@ -1,8 +1,8 @@
-const knex = require('../config/database')
+const knex = require("knex")(require("../knexfile")());
 
 const getAllUser = async (req, res) => {
     try {
-        const result = await knex.select('*').from('Users');
+        const result = await knex.select('*').from('User');
         res.status(200).json(result);
     } catch (error) {
         console.log(error);
@@ -12,11 +12,11 @@ const getAllUser = async (req, res) => {
 
 const getAllAdmin = async (req, res) => {
     try {
-        const result = await knex.select('*').from('Users').where('roles', 'admin');
+        const result = await knex.select('*').from('User').where('roles', 'INSTITUTION');
         res.status(200).json(result);
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: 'An error occurred while fetching admins' });
+        res.status(500).json({ error: 'An error occurred while fetching INSTITUTION' });
     }
 };
 
@@ -25,7 +25,7 @@ const createAdmin = async (req, res) => {
         const { name, email, password } = req.body;
         const createdAt = new Date();
         const roles = 'admin';
-        const result = await knex('Users').insert({ name, email, password, roles, createdAt });
+        const result = await knex('User').insert({ name, email, password, roles, createdAt });
         if (result) {
             res.status(201).json({ message: 'Admin created successfully' });
         } else {
