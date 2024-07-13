@@ -27,7 +27,35 @@ const postSameReporter = async (req, res) => {
   }
 };
 
+const getSameReporterCount = async (req, res) => {
+  try {
+    const { reportId } = req.params;
+    const count = await sameReporterModel.getSameReporterCount(reportId);
+    sendResponse(res, 200, { count });
+  } catch (error) {
+    handleError(res, error, "Failed to get SameReporter count");
+  }
+};
+
+const deleteSameReporter = async (req, res) => {
+  try {
+    const { reportId, userId } = req.params;
+    const deletedCount = await sameReporterModel.deleteSameReporter(
+      reportId,
+      userId
+    );
+    if (deletedCount === 0) {
+      return sendResponse(res, 404, { message: "SameReporter not found" });
+    }
+    sendResponse(res, 200, { message: "SameReporter deleted successfully" });
+  } catch (error) {
+    handleError(res, error, "Failed to delete SameReporter");
+  }
+};
+
 module.exports = {
   checkSameReporterConditions,
   postSameReporter,
+  getSameReporterCount,
+  deleteSameReporter,
 };

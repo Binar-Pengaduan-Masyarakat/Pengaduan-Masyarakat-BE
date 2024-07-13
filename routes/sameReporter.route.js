@@ -13,4 +13,16 @@ router.get(
   sameReporterController.checkSameReporterConditions
 );
 
+// MENGECEK JUMLAH SAME REPORTER PADA reportId TERTENTU
+router.get(
+  "/same-reporter-count/:reportId",
+  sameReporterController.getSameReporterCount
+);
+
+// MENGHAPUS SAME REPORTER
+router.delete(
+  "/same-reporter/:reportId/:userId",
+  sameReporterController.deleteSameReporter
+);
+
 module.exports = router;

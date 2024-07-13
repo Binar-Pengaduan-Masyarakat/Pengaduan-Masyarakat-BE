@@ -40,7 +40,34 @@ const createSameReporter = async (reportId, userId) => {
   }
 };
 
+const getSameReporterCount = async (reportId) => {
+  try {
+    const count = await knex("SameReporter")
+      .where({ reportId })
+      .count("* as count")
+      .first();
+    return count.count;
+  } catch (error) {
+    console.error("getSameReporterCount error:", error);
+    throw error;
+  }
+};
+
+const deleteSameReporter = async (reportId, userId) => {
+  try {
+    const deletedCount = await knex("SameReporter")
+      .where({ reportId, userId })
+      .del();
+    return deletedCount;
+  } catch (error) {
+    console.error("deleteSameReporter error:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   checkSameReporterConditions,
   createSameReporter,
+  getSameReporterCount,
+  deleteSameReporter,
 };
