@@ -20,9 +20,6 @@ router.get(
 );
 
 // MENGHAPUS SAME REPORTER
-router.delete(
-  "/same-reporter/:reportId/:userId",
-  sameReporterController.deleteSameReporter
-);
+router.post("/delete-same-reporter", sameReporterController.deleteSameReporter);
 
 module.exports = router;

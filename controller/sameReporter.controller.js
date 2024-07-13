@@ -39,7 +39,7 @@ const getSameReporterCount = async (req, res) => {
 
 const deleteSameReporter = async (req, res) => {
   try {
-    const { reportId, userId } = req.params;
+    const { reportId, userId } = req.body;
     const deletedCount = await sameReporterModel.deleteSameReporter(
       reportId,
       userId
