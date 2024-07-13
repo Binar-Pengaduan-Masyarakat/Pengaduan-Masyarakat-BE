@@ -93,13 +93,16 @@ describe("SameReporter API", () => {
     expect(typeof response.body.data.count).toBe("string");
   });
 
-  test("DELETE /api/same-reporter/:reportId/:userId", async () => {
-    const reportId = "UR1";
-    const userId = "US2";
+  test("DELETE /api/same-reporter", async () => {
+    const sameReporterData = {
+      reportId: "UR1",
+      userId: "US2",
+    };
 
-    const response = await request(app).delete(
-      `/api/same-reporter/${reportId}/${userId}`
-    );
+    const response = await request(app)
+      .post("/api/delete-same-reporter")
+      .send(sameReporterData);
+
     expect(response.statusCode).toBe(200);
     expect(response.body.status).toBe("success");
     expect(response.body.data).toHaveProperty("message");
@@ -108,13 +111,16 @@ describe("SameReporter API", () => {
     );
   });
 
-  test("DELETE /api/same-reporter/:reportId/:userId - Not Found", async () => {
-    const reportId = "UR999";
-    const userId = "US999";
+  test("DELETE /api/same-reporter - Not Found", async () => {
+    const sameReporterData = {
+      reportId: "UR999",
+      userId: "US999",
+    };
 
-    const response = await request(app).delete(
-      `/api/same-reporter/${reportId}/${userId}`
-    );
+    const response = await request(app)
+      .post("/api/delete-same-reporter")
+      .send(sameReporterData);
+
     expect(response.statusCode).toBe(404);
     expect(response.body.status).toBe("success");
     expect(response.body.data).toHaveProperty("message");
