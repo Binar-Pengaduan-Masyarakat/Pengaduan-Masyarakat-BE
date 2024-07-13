@@ -1,5 +1,4 @@
 const knex = require('../config/database')
-const { v4: uuidv4 } = require('uuid');
 
 const getAllUser = async (req, res) => {
     try {
@@ -24,10 +23,9 @@ const getAllAdmin = async (req, res) => {
 const createAdmin = async (req, res) => {
     try {
         const { name, email, password } = req.body;
-        const id = Math.floor(Math.random() * 100000);
         const createdAt = new Date();
         const roles = 'admin';
-        const result = await knex('Users').insert({ id, name, email, password, roles, createdAt });
+        const result = await knex('Users').insert({ name, email, password, roles, createdAt });
         if (result) {
             res.status(201).json({ message: 'Admin created successfully' });
         } else {

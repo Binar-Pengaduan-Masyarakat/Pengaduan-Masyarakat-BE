@@ -28,8 +28,7 @@ const getCategoryById = async (req, res) => {
 const createCategory = async (req, res) => {
     try {
         const { categoryName } = req.body;
-        const categoryId = Math.floor(Math.random() * 100000);
-        const result = await knex('Category').insert({ categoryId: categoryId, categoryName: categoryName });
+        const result = await knex('Category').insert({ categoryName: categoryName });
         if (result) {
             res.status(201).json({ message: 'Category created successfully' });
         } else {
