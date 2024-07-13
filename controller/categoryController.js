@@ -1,4 +1,4 @@
-const knex = require('../config/database')
+const knex = require("knex")(require("../knexfile")());
 
 const getAllCategory = async (req, res) => {
     try {
