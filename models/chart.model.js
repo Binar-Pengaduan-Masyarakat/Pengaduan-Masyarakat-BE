@@ -14,7 +14,10 @@ const checkUserExists = async (userId) => {
 const getRoleDataset = async (roles) => {
   try {
     const roleCounts = await databaseCounter.findRoleCounts(roles);
-    const labels = roleCounts.map((role) => role.roles);
+    const labels = roleCounts.map((role) => {
+      const roleName = role.roles.toLowerCase();
+      return roleName.charAt(0).toUpperCase() + roleName.slice(1);
+    });
     const data = roleCounts.map((role) => role.count);
     return { labels, data };
   } catch (error) {
@@ -43,7 +46,7 @@ const getReportStatsDataset = async () => {
       databaseCounter.findReportResultCounts(),
     ]);
 
-    const labels = ["TOTAL REPORT", "RESPONDED REPORT", "FINISHED REPORT"];
+    const labels = ["Total Report", "Responded Report", "Finished Report"];
     const data = [reportCount, responseCount, resultCount];
 
     return { labels, data };
