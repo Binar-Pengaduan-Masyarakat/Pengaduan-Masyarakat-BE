@@ -12,16 +12,30 @@ const checkSameReporterConditions = async (reportId, userId) => {
       throw new Error("User not found");
     }
 
+    const isPoster = report.userId === userId;
     const existingSameReporter = await knex("SameReporter")
       .where({ reportId, userId })
       .first();
 
-    return {
-      canReport: !existingSameReporter,
-      message: existingSameReporter
-        ? "You have already reported this as the same reporter"
-        : "You can report this as the same reporter",
-    };
+    if (isPoster) {
+      return {
+        canReport: false,
+        isPoster,
+        message: "You cannot report your own post as same reporter",
+      };
+    } else if (existingSameReporter) {
+      return {
+        canReport: false,
+        isPoster,
+        message: "You have already reported this as the same reporter",
+      };
+    } else {
+      return {
+        canReport: true,
+        isPoster,
+        message: "You can report this as the same reporter",
+      };
+    }
   } catch (error) {
     console.error("checkSameReporterConditions error:", error);
     throw error;
