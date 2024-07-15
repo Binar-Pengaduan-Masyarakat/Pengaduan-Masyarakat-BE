@@ -1,13 +1,13 @@
 // services/institutionService.js
-const User = require('../models/user');
+const User = require("../models/user.model");
 
-const createInstitution = async (data) => {
-  data.roles = 'INSTITUTION';  // Ensure all institutions have the correct role
-  return User.create(data);
-};
+// const createInstitution = async (data) => {
+//   data.roles = "INSTITUTION"; // Ensure all institutions have the correct role
+//   return User.create(data);
+// };
 
 const getAllInstitutions = async () => {
-  return User.findByRole('INSTITUTION');
+  return User.findByRole("INSTITUTION");
 };
 
 const getInstitutionById = async (id) => {
@@ -23,9 +23,9 @@ const deleteInstitution = async (id) => {
 };
 
 module.exports = {
-  createInstitution,
+  // createInstitution,
   getAllInstitutions,
   getInstitutionById,
   updateInstitution,
-  deleteInstitution
+  deleteInstitution,
 };

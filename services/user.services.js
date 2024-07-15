@@ -1,5 +1,5 @@
-const bcrypt = require('bcryptjs');
-const User = require('../models/user');
+const bcrypt = require("bcryptjs");
+const User = require("../models/user.model");
 
 const createUser = async (userData) => {
   const hashedPassword = await bcrypt.hash(userData.password, 10);
@@ -26,5 +26,5 @@ module.exports = {
   createUser,
   getUserById,
   updateUser,
-  deleteUser
+  deleteUser,
 };

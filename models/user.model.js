@@ -9,6 +9,10 @@ const User = {
     return knex("User").where({ email }).first();
   },
 
+  async findByRole(roles) {
+    return knex("User").where({ roles }).select("*");
+  },
+
   async create(user) {
     return knex("User").insert(user).returning("*");
   },

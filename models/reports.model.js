@@ -23,14 +23,18 @@ const updateReportModel = async (id, data) => {
 };
 
 const deleteReportModel = async (id) => {
+  const reportExists = await knex("UserReport").where({ reportId: id }).first();
+
+  if (!reportExists) {
+    throw new Error(`Report with ID ${id} does not exist`);
+  }
+
   return knex("UserReport")
     .where({ reportId: id })
     .del()
-    .then(
-      (numberRowsUpdate = () => {
-        console.log(`${numRowsUpdated}row(s) updated `);
-      })
-    )
+    .then((numRowsDeleted) => {
+      console.log(`${numRowsDeleted} row(s) deleted`);
+    })
     .catch((err) => {
       console.log(err);
     });

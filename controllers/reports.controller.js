@@ -86,11 +86,11 @@ const deleteReport = async (req, res) => {
     const reportId = req.params.reportId;
     await reports.deleteReportModel(reportId);
     res.json({
-      message: `Data report with id ${reportId} Success Delete`,
+      message: `Data report with id ${reportId} Deleted successfully`,
     });
   } catch (err) {
     res.json({
-      message: `Data Field Delete, this program has issue like this ${err} `,
+      error: err.message,
     });
   }
 };

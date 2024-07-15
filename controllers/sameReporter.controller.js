@@ -16,7 +16,8 @@ const checkSameReporterConditions = async (req, res) => {
 
 const postSameReporter = async (req, res) => {
   try {
-    const { reportId, userId } = req.body;
+    const { reportId } = req.params;
+    const { userId } = req.body;
     const newSameReporter = await sameReporterModel.createSameReporter(
       reportId,
       userId
@@ -29,17 +30,18 @@ const postSameReporter = async (req, res) => {
 
 const getSameReporterCount = async (req, res) => {
   try {
-    const { reportId } = req.params;
+    const reportId = req.params.reportId;
     const count = await sameReporterModel.getSameReporterCount(reportId);
     sendResponse(res, 200, { count });
   } catch (error) {
-    handleError(res, error, "Failed to get SameReporter count");
+    handleError(res, error, "Failed to get Same Reporter count");
   }
 };
 
 const deleteSameReporter = async (req, res) => {
   try {
-    const { reportId, userId } = req.body;
+    const { reportId } = req.params;
+    const { userId } = req.body;
     const deletedCount = await sameReporterModel.deleteSameReporter(
       reportId,
       userId
