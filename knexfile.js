@@ -1,25 +1,11 @@
-module.exports = {
-    development: {
-      client: 'pg',
-      connection: {
-        host: 'localhost',
-        user: 'postgres',
-        password: 'admin',
-        database: 'db_profile',
-        port: 5432,
-      },
-      pool: {
-        min: 2,
-        max: 10,
-      },
-      migrations: {
-        directory: './database/development/migrations',
-      },
-      seeds: {
-        directory: './database/development/seeds',
-      },
-      
-    },
+/**
+ * @type { Object.<string, import("knex").Knex.Config> }
+ */
+require("dotenv").config();
 
-  };
-  
+const databaseConfigs = require("./config/database");
+
+module.exports = (environment) => {
+  const env = environment || process.env.NODE_ENV;
+  return databaseConfigs[env];
+};
