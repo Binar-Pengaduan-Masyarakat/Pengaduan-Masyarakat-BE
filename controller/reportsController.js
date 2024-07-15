@@ -4,13 +4,13 @@ const getReports = async (req, res) => {
   try {
     const allreports = await reports.getReportsModel();
     return res.json({
-      message: "Get Data Success",
+      message: "Get All Data Reports Success",
       data: allreports,
       length: allreports.length,
     });
   } catch (error) {
     return res.json({
-      message: "Get Data Feild",
+      message: "Get All Data Reports Failed",
       data: {},
     });
   }
@@ -43,9 +43,9 @@ const addReport = async (req, res) => {
       address: address,
     };
     await reports.createReportsModel(data);
-    res.json(`Add Data Success with reportId is ${reportId} `);
+    res.json(`New Data with reportId ${reportId} Added successfully`);
   } catch (error) {
-    res.json(`Add Data Faild you have issue like this ${error}`);
+    res.json(`New Data Failed to Add Because ${error}`);
   }
 };
 
@@ -72,11 +72,11 @@ const updateReport = async (req, res) => {
     };
     await reports.updateReportModel(reportId, data);
     res.json({
-      message: `Data Report with ReportId is ${reportId} Success Update`,
+      message: `Report Data with reportId ${reportId} Successfully updated  `,
     });
   } catch (error) {
     res.json({
-      message: "Data Field Update",
+      message: `Report Data Fails to Update Because ${error} `,
     });
   }
 };
@@ -86,11 +86,11 @@ const deleteReport = async (req, res) => {
     const reportId = req.params.reportId;
     await reports.deleteReportModel(reportId);
     res.json({
-      message: `Data report with id ${reportId} Success Delete`,
+      message: `Data report with reportid ${reportId} Successfully Deleted`,
     });
   } catch (err) {
     res.json({
-      message: `Data Field Delete, this program has issue like this ${err} `,
+      message: `Report Data Fails to Delete Because Has ${err}`,
     });
   }
 };

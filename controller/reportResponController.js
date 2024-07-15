@@ -4,12 +4,12 @@ const getRespons = async (req, res) => {
   try {
     const allresponse = await reportResponse.getResponseModel();
     return res.json({
-      message: "Get Data Success",
+      message: "Data All report responses were successfully obtained",
       data: allresponse,
     });
   } catch (error) {
     return res.json({
-      message: "Get Data Field",
+      message: "Data All report responses failed to obtain",
     });
   }
 };
@@ -27,18 +27,18 @@ const addRespons = async (req, res) => {
     };
     await reportResponse.createResponseModel(data);
     res.json({
-      message: "Data Successs Added",
+      message: `New Data with responseId ${responseId} Added successfully`,
     });
   } catch (error) {
     res.json({
-      message: "Faild data added" + error,
+      message: `New Data Failed to Add Because ${error}`,
     });
   }
 };
 
 const updateRespons = async (req, res) => {
   try {
-    const responId = req.params.responsId;
+    const responId = req.params.responId;
     const { reportId, userId } = req.body;
     const data = {
       reportId: reportId,
@@ -46,11 +46,11 @@ const updateRespons = async (req, res) => {
     };
     await reportResponse.updateResponseModel(responId, data);
     res.json({
-      message: "Data Success Update",
+      message: `Response Report Data with responseId ${responId} Successfully updated`,
     });
-  } catch (err) {
+  } catch (error) {
     res.json({
-      message: "Data Faild Update",
+      message: `Response Report Data Fails to Update Because ${error}`,
     });
   }
 };
@@ -60,11 +60,11 @@ const deleteRespons = async (req, res) => {
     const responId = req.params.responId;
     await reportResponse.deleteResponseModel(responId);
     res.json({
-      message: "Data Success Delete",
+      message: `Data response report with responseid ${responId} Successfully Deleted`,
     });
   } catch (error) {
     res.json({
-      message: "Data Faild Delete",
+      message: `Response Data Fails to Delete Because Has ${error}`,
     });
   }
 };
