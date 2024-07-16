@@ -1,4 +1,3 @@
-// services/institutionService.js
 const User = require("../models/user.model");
 
 // const createInstitution = async (data) => {

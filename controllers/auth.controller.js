@@ -2,6 +2,7 @@ const knex = require("knex")(require("../knexfile")());
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+require("dotenv").config();
 
 // Setup Nodemailer transporter
 const transporter = nodemailer.createTransport({
@@ -29,7 +30,7 @@ module.exports = class {
         .returning("*");
 
       const token = jwt.sign(userId, "secretkey", { expiresIn: "1h" });
-      const verificationLink = `http://localhost:3000/api/auth/verify-email?token=${token}`;
+      const verificationLink = `${process.env.EMAIL_VERIFICATION_URL}/api/auth/verify-email?token=${token}`;
 
       await transporter.sendMail({
         from: "Admin Pengaduan Masyarakat",
