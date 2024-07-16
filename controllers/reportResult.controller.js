@@ -16,12 +16,8 @@ const getResults = async (req, res) => {
 
 const createResult = async (req, res) => {
   try {
-    const allResults = await reportResult.getResultsModel();
-    const resultlength = allResults.length + 1;
-    const resultId = `RE${resultlength}`;
     const { reportId, userId, resultContent, resultImage } = req.body;
     const data = {
-      resultId: resultId,
       reportId: reportId,
       userId: userId,
       resultContent: resultContent,
@@ -41,9 +37,8 @@ const createResult = async (req, res) => {
 const updateResult = async (req, res) => {
   try {
     const resultId = req.params.resultId;
-    const { reportId, userId, resultContent, resultImage } = req.body;
+    const { userId, resultContent, resultImage } = req.body;
     const data = {
-      reportId: reportId,
       userId: userId,
       resultContent: resultContent,
       resultImage: resultImage,

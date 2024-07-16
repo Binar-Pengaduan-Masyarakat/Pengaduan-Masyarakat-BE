@@ -18,6 +18,8 @@ module.exports = class {
     try {
       const { name, email, password, roles } = req.body;
 
+      console.log("Registering user:", name, email);
+
       const hashedPassword = await bcrypt.hash(password, 10);
       const [userId] = await knex("User")
         .insert({
@@ -29,8 +31,13 @@ module.exports = class {
         })
         .returning("*");
 
+      console.log("User created:", userId);
+
       const token = jwt.sign(userId, "secretkey", { expiresIn: "1h" });
+      console.log("Token generated:", token);
+
       const verificationLink = `${process.env.EMAIL_VERIFICATION_URL}/api/auth/verify-email?token=${token}`;
+      console.log("Verification link:", verificationLink);
 
       await transporter.sendMail({
         from: "Admin Pengaduan Masyarakat",
@@ -39,10 +46,13 @@ module.exports = class {
         text: `Click the following link to verify your email: ${verificationLink}`,
       });
 
+      console.log("Email sent");
+
       res.status(201).json({
         message: "User registered. Check your email for verification link.",
       });
     } catch (error) {
+      console.error("Error registering user:", error);
       res.status(500).json({ error: error.message });
     }
   };

@@ -24,7 +24,8 @@ const getInstitutionById = async (req, res) => {
       req.params.userId
     );
     if (institution) {
-      res.json(institution);
+      const { password, ...institutionWithoutPassword } = institution;
+      res.json(institutionWithoutPassword);
     } else {
       res.status(404).json({ message: "Institution not found" });
     }
@@ -39,7 +40,8 @@ const updateInstitution = async (req, res) => {
       req.params.userId,
       req.body
     );
-    res.json(institution);
+    const { password, ...institutionWithoutPassword } = institution;
+    res.json(institutionWithoutPassword);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -48,7 +50,7 @@ const updateInstitution = async (req, res) => {
 const deleteInstitution = async (req, res) => {
   try {
     await institutionService.deleteInstitution(req.params.userId);
-    res.status(204).json({ message: "Deleted successfully" });
+    res.status(200).json({ message: "Deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

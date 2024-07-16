@@ -8,7 +8,11 @@ const getUserProfile = async (req, res) => {
         message: "User not found. Please check the user ID and try again.",
       });
     }
-    res.json({ message: "User profile retrieved successfully.", data: user });
+    const { password, ...userWithoutPassword } = user;
+    res.json({
+      message: "User profile retrieved successfully.",
+      data: userWithoutPassword,
+    });
   } catch (error) {
     console.error("Failed to retrieve user profile:", error);
     res.status(500).json({
@@ -42,9 +46,10 @@ const updateUserProfile = async (req, res) => {
         message: "User not found. Please check the user ID and try again.",
       });
     }
+    const { password, ...userWithoutPassword } = updatedUser;
     res.json({
       message: "User profile updated successfully.",
-      data: updatedUser,
+      data: userWithoutPassword,
     });
   } catch (error) {
     console.error("Failed to update user profile:", error);
@@ -57,7 +62,7 @@ const updateUserProfile = async (req, res) => {
 const deleteUserProfile = async (req, res) => {
   try {
     await userService.deleteUser(req.params.userId);
-    res.status(204).json({ message: "User profile deleted successfully." });
+    res.status(200).json({ message: "User profile deleted successfully." });
   } catch (error) {
     console.error("Failed to delete user profile:", error);
     res

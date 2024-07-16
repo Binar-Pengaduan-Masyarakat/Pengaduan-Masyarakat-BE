@@ -4,12 +4,12 @@ const getResponse = async (req, res) => {
   try {
     const allresponse = await reportResponse.getResponseModel();
     return res.json({
-      message: "Get Data Success",
+      message: "Get Data Successfully",
       data: allresponse,
     });
   } catch (error) {
     return res.json({
-      message: "Get Data Field",
+      message: "Get Data has Failed",
     });
   }
 };
@@ -27,11 +27,11 @@ const createResponse = async (req, res) => {
     };
     await reportResponse.createResponseModel(data);
     res.json({
-      message: "Data Successs Added",
+      message: "Data Added Successfully",
     });
   } catch (error) {
     res.json({
-      message: "Faild data added" + error,
+      message: "Faild to add Data" + error,
     });
   }
 };
@@ -46,11 +46,11 @@ const updateResponse = async (req, res) => {
     };
     await reportResponse.updateResponseModel(responseId, data);
     res.json({
-      message: "Data Success Update",
+      message: "Data Updated Successfully",
     });
   } catch (err) {
     res.json({
-      message: "Data Faild Update",
+      message: "Failed to Update",
     });
   }
 };
@@ -60,11 +60,11 @@ const deleteResponse = async (req, res) => {
     const responseId = req.params.responseId;
     await reportResponse.deleteResponseModel(responseId);
     res.json({
-      message: "Data Success Delete",
+      message: "Data Deleted Successfully",
     });
   } catch (error) {
     res.json({
-      message: "Data Faild Delete",
+      message: "Failed to Delete Data",
     });
   }
 };
