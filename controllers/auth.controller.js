@@ -29,7 +29,7 @@ module.exports = class {
         .returning("*");
 
       const token = jwt.sign(userId, "secretkey", { expiresIn: "1h" });
-      const verificationLink = `http://localhost:3500/api/auth/verify-email?token=${token}`;
+      const verificationLink = `http://localhost:3000/api/auth/verify-email?token=${token}`;
 
       await transporter.sendMail({
         from: "Admin Pengaduan Masyarakat",
