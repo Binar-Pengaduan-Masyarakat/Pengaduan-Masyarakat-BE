@@ -1,6 +1,6 @@
 const reportResponse = require("../models/reportResponse.model");
 
-const getRespons = async (req, res) => {
+const getResponse = async (req, res) => {
   try {
     const allresponse = await reportResponse.getResponseModel();
     return res.json({
@@ -13,7 +13,7 @@ const getRespons = async (req, res) => {
     });
   }
 };
-const addRespons = async (req, res) => {
+const createResponse = async (req, res) => {
   try {
     const allRespons = await reportResponse.getResponseModel();
     const responslength = allRespons.length + 1;
@@ -36,15 +36,15 @@ const addRespons = async (req, res) => {
   }
 };
 
-const updateRespons = async (req, res) => {
+const updateResponse = async (req, res) => {
   try {
-    const responId = req.params.responsId;
+    const responseId = req.params.responseId;
     const { reportId, userId } = req.body;
     const data = {
       reportId: reportId,
       userId: userId,
     };
-    await reportResponse.updateResponseModel(responId, data);
+    await reportResponse.updateResponseModel(responseId, data);
     res.json({
       message: "Data Success Update",
     });
@@ -55,10 +55,10 @@ const updateRespons = async (req, res) => {
   }
 };
 
-const deleteRespons = async (req, res) => {
+const deleteResponse = async (req, res) => {
   try {
-    const responId = req.params.responId;
-    await reportResponse.deleteResponseModel(responId);
+    const responseId = req.params.responseId;
+    await reportResponse.deleteResponseModel(responseId);
     res.json({
       message: "Data Success Delete",
     });
@@ -69,8 +69,8 @@ const deleteRespons = async (req, res) => {
   }
 };
 module.exports = {
-  getRespons,
-  addRespons,
-  updateRespons,
-  deleteRespons,
+  getResponse,
+  createResponse,
+  updateResponse,
+  deleteResponse,
 };

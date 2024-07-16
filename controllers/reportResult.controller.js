@@ -4,17 +4,17 @@ const getResults = async (req, res) => {
   try {
     const allResults = await reportResult.getResultsModel();
     res.json({
-      message: "Get Data Success",
+      message: "Get Data Successfully",
       data: allResults,
     });
   } catch (error) {
     res.json({
-      message: "Get Data Faild",
+      message: "Failed to Get Data",
     });
   }
 };
 
-const addResult = async (req, res) => {
+const createResult = async (req, res) => {
   try {
     const allResults = await reportResult.getResultsModel();
     const resultlength = allResults.length + 1;
@@ -29,11 +29,11 @@ const addResult = async (req, res) => {
     };
     await reportResult.createResultModel(data);
     return res.json({
-      message: "Data Success Added",
+      message: "Data Added Successfully",
     });
   } catch (error) {
     return res.json({
-      message: `Data Failed Added Has error like ${error}`,
+      message: `Data Failed to be Added`,
     });
   }
 };
@@ -50,11 +50,11 @@ const updateResult = async (req, res) => {
     };
     await reportResult.updateResultModel(resultId, data);
     return res.json({
-      message: "Data Success Update",
+      message: "Data Updated Successfully",
     });
   } catch (error) {
     return res.json({
-      message: "Data Failed Added",
+      message: "Data Failed to be Added",
     });
   }
 };
@@ -64,17 +64,17 @@ const deleteResult = async (req, res) => {
     const resultId = req.params.resultId;
     await reportResult.deleteResultModel(resultId);
     return res.json({
-      message: "Data Success Delete",
+      message: "Data Deleted Successfully",
     });
   } catch (error) {
     return res.json({
-      message: "Data Failed Deleted",
+      message: "Data Failed to be Deleted",
     });
   }
 };
 module.exports = {
   getResults,
-  addResult,
+  createResult,
   updateResult,
   deleteResult,
 };
