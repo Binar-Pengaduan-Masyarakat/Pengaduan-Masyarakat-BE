@@ -1,41 +1,47 @@
 const express = require("express");
-const port = 3500;
-const path = require("path");
-const cookieParser = require("cookie-parser");
-const logger = require("morgan");
-const middleware = require("./middleware/middleware");
+const morgan = require("morgan");
+const cors = require("cors");
+require("dotenv").config();
+
+const userRoutes = require("./routes/user.routes");
+const institutionRoutes = require("./routes/institution.routes");
+const superAdminRoutes = require("./routes/superAdmin.routes");
+const categoryRoutes = require("./routes/category.routes");
+const reportRoutes = require("./routes/reports.routes");
+const reportResponseRoutes = require("./routes/reportResponse.routes");
+const reportResultRoutes = require("./routes/reportResult.routes");
+const sameReporterRoutes = require("./routes/sameReporter.routes");
+const chartRoutes = require("./routes/chart.routes");
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
 
+
 const app = express();
 
-// view engine setup
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
-
-app.use(logger("dev"));
+app.use(cors());
+app.use(morgan("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
-app.use("/", indexRouter);
+app.use("/api/users", userRoutes);
+app.use("/api/institutions", institutionRoutes);
+app.use("/api/superAdmin", superAdminRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/reports", reportRoutes);
+app.use("/api/reportResponses", reportResponseRoutes);
+app.use("/api/reportResults", reportResultRoutes);
+app.use("/api/sameReporter", sameReporterRoutes);
+app.use("/api/charts", chartRoutes);
+
+app.use("/index", indexRouter);
 app.use("/users", usersRouter);
 app.use("/auth", authRouter);
 
-app.listen(port, () => {
-  console.log(`Server Running in http://localhost:${port}`);
+app.get("/", (req, res) => {
+  res.send("The app is running!");
 });
-
-// Middleware
-app
-  .use(middleware.errorHandler)
-  .use(middleware.logRequestTime)
-  .use(middleware.authenticate)
-  .use(middleware.notFound)
-  .use(middleware.dataNotFound)
-  .use(middleware.handleServerError);
 
 module.exports = app;
