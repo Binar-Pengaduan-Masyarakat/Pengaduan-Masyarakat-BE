@@ -13,6 +13,11 @@ const reportResultRoutes = require("./routes/reportResult.routes");
 const sameReporterRoutes = require("./routes/sameReporter.routes");
 const chartRoutes = require("./routes/chart.routes");
 
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/users");
+const authRouter = require("./routes/auth");
+
+
 const app = express();
 
 app.use(cors());
@@ -30,6 +35,10 @@ app.use("/api/reportResponses", reportResponseRoutes);
 app.use("/api/reportResults", reportResultRoutes);
 app.use("/api/sameReporter", sameReporterRoutes);
 app.use("/api/charts", chartRoutes);
+
+app.use("/index", indexRouter);
+app.use("/users", usersRouter);
+app.use("/auth", authRouter);
 
 app.get("/", (req, res) => {
   res.send("The app is running!");
