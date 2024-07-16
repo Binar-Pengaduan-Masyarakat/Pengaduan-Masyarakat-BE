@@ -11,6 +11,7 @@ exports.up = function (knex) {
       table.string("email", 255).unique().notNullable();
       table.string("password", 255).notNullable();
       table.enum("roles", ["USER", "INSTITUTION", "SUPERADMIN"]).notNullable();
+      table.boolean("isVerified").defaultTo(false);
       table.timestamp("createdAt").defaultTo(knex.fn.now());
     })
     .raw(
