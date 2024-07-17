@@ -34,7 +34,7 @@ module.exports = class {
 
       // console.log("User created:", userId);
 
-      const token = jwt.sign(userId, "secretkey", { expiresIn: "1h" });
+      // const token = jwt.sign(userId, "secretkey", { expiresIn: "1h" });
       // console.log("Token generated:", token);
 
       const verificationLink = `${process.env.EMAIL_VERIFICATION_URL}/api/auth/verify-email?token=${verificationToken}`;
