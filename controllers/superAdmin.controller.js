@@ -1,4 +1,5 @@
 const knex = require("knex")(require("../knexfile")());
+const bcrypt = require("bcrypt");
 
 const getAllUsers = async (req, res) => {
   try {
@@ -30,11 +31,13 @@ const createInstitution = async (req, res) => {
     const { name, email, password } = req.body;
     const createdAt = new Date();
     const roles = "INSTITUTION";
+    const hashedPassword = await bcrypt.hash(password, 10);
     const result = await knex("User").insert({
       name,
       email,
-      password,
+      password: hashedPassword,
       roles,
+      isVerified: true,
       createdAt,
     });
     if (result) {

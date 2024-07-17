@@ -21,19 +21,19 @@ const getUserProfile = async (req, res) => {
   }
 };
 
-const createUserProfile = async (req, res) => {
-  try {
-    const newUser = await userService.createUser(req.body);
-    res
-      .status(201)
-      .json({ message: "User profile created successfully.", data: newUser });
-  } catch (error) {
-    console.error("Failed to create user profile:", error);
-    res
-      .status(500)
-      .json({ message: "Internal server error while creating user profile." });
-  }
-};
+// const createUserProfile = async (req, res) => {
+//   try {
+//     const newUser = await userService.createUser(req.body);
+//     res
+//       .status(201)
+//       .json({ message: "User profile created successfully.", data: newUser });
+//   } catch (error) {
+//     console.error("Failed to create user profile:", error);
+//     res
+//       .status(500)
+//       .json({ message: "Internal server error while creating user profile." });
+//   }
+// };
 
 const updateUserProfile = async (req, res) => {
   try {
@@ -73,7 +73,7 @@ const deleteUserProfile = async (req, res) => {
 
 module.exports = {
   getUserProfile,
-  createUserProfile,
+  // createUserProfile,
   updateUserProfile,
   deleteUserProfile,
 };

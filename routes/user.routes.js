@@ -5,7 +5,7 @@ const router = express.Router();
 
 router
   // POST create new user
-  .post("/", userController.createUserProfile)
+  // .post("/", userController.createUserProfile)
 
   // GET user details by userId
   .get("/:userId", userController.getUserProfile)
