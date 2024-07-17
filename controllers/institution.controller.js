@@ -24,8 +24,12 @@ const getInstitutionById = async (req, res) => {
       req.params.userId
     );
     if (institution) {
-      const { password, ...institutionWithoutPassword } = institution;
-      res.json(institutionWithoutPassword);
+      const {
+        password,
+        verificationToken,
+        ...institutionWithoutSensitiveData
+      } = institution;
+      res.json(institutionWithoutSensitiveData);
     } else {
       res.status(404).json({ message: "Institution not found" });
     }
@@ -40,8 +44,9 @@ const updateInstitution = async (req, res) => {
       req.params.userId,
       req.body
     );
-    const { password, ...institutionWithoutPassword } = institution;
-    res.json(institutionWithoutPassword);
+    const { password, verificationToken, ...institutionWithoutSensitiveData } =
+      institution;
+    res.json(institutionWithoutSensitiveData);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

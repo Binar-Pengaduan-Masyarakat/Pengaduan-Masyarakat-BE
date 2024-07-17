@@ -8,7 +8,7 @@ const getUserProfile = async (req, res) => {
         message: "User not found. Please check the user ID and try again.",
       });
     }
-    const { password, ...userWithoutPassword } = user;
+    const { password, verificationToken, ...userWithoutPassword } = user;
     res.json({
       message: "User profile retrieved successfully.",
       data: userWithoutPassword,
@@ -46,7 +46,7 @@ const updateUserProfile = async (req, res) => {
         message: "User not found. Please check the user ID and try again.",
       });
     }
-    const { password, ...userWithoutPassword } = updatedUser;
+    const { password, verificationToken, ...userWithoutPassword } = updatedUser;
     res.json({
       message: "User profile updated successfully.",
       data: userWithoutPassword,
