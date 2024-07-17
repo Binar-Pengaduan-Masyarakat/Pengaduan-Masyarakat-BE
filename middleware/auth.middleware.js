@@ -1,5 +1,6 @@
 const knex = require("knex")(require("../knexfile")());
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 module.exports = class {
   static authenticate(req, res, next) {
@@ -8,7 +9,7 @@ module.exports = class {
       return res.redirect("/auth/login");
     }
 
-    jwt.verify(token, "secretkey", (err, decoded) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
         return res.redirect("/auth/login");
       }
