@@ -136,7 +136,7 @@ module.exports = class {
         return res.status(400).json({ error: "Invalid email or password" });
       }
 
-      const token = jwt.sign({ userId: user.userId }, "secretkey", {
+      const token = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });
 
