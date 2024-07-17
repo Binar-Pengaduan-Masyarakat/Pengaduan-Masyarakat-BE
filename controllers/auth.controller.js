@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
 module.exports = class {
   static async register(req, res) {
     try {
-      const { name, email, password, roles } = req.body;
+      const { name, email, password } = req.body;
       const hashedPassword = await bcrypt.hash(password, 10);
       const verificationToken = uuid.v4();
       await knex("User").insert({
@@ -24,7 +24,7 @@ module.exports = class {
         email,
         password: hashedPassword,
         isVerified: false,
-        roles,
+        roles: "USER",
         verificationToken,
       });
 
