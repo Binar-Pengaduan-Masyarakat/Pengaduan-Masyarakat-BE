@@ -4,14 +4,15 @@ require("dotenv").config();
 
 module.exports = class {
   static authenticate(req, res, next) {
-    const token = req.headers;
+    const token = req.cookies.token;
+
     if (!token) {
-      return res.redirect("/auth/login");
+      return res.status(401).json({ message: "Authentication required" });
     }
 
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
-        return res.redirect("/auth/login");
+        return res.status(403).json({ message: "Invalid token" });
       }
       req.user = decoded;
       next();
