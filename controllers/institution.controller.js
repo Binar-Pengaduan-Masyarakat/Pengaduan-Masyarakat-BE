@@ -12,7 +12,15 @@ const institutionService = require("../services/institution.services");
 const getAllInstitutions = async (req, res) => {
   try {
     const institutions = await institutionService.getAllInstitutions();
-    res.json(institutions);
+    const institutionsWithoutSensitiveData = institutions.map((institution) => {
+      const {
+        password,
+        verificationToken,
+        ...institutionWithoutSensitiveData
+      } = institution;
+      return institutionWithoutSensitiveData;
+    });
+    res.json(institutionsWithoutSensitiveData);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
