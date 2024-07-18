@@ -4,6 +4,14 @@ const getResultsModel = async () => {
   return await knex.select("*").from("ReportResult");
 };
 
+const getReportResultByIdModel = async (id) => {
+  return await knex
+    .select("*")
+    .from("ReportResult")
+    .where({ reportId: id })
+    .first();
+};
+
 const createResultModel = async (data) => {
   return await knex("ReportResult").insert(data).returning("*");
 };
@@ -16,6 +24,7 @@ const deleteResultModel = async (id) => {
 
 module.exports = {
   getResultsModel,
+  getReportResultByIdModel,
   createResultModel,
   updateResultModel,
   deleteResultModel,

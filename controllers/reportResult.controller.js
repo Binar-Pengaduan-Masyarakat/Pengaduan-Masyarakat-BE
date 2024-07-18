@@ -14,6 +14,27 @@ const getResults = async (req, res) => {
   }
 };
 
+const getReportResultById = async (req, res) => {
+  try {
+    const resultId = req.params.reportId;
+    const result = await reportResult.getReportResultByIdModel(resultId); // Assuming you have this function in your model
+    if (result) {
+      res.json({
+        message: "Get Data Successfully",
+        data: result,
+      });
+    } else {
+      res.json({
+        message: "Report Result not found",
+      });
+    }
+  } catch (error) {
+    res.json({
+      message: "Failed to Get Data",
+    });
+  }
+};
+
 const createResult = async (req, res) => {
   try {
     const { reportId, userId, resultContent, resultImage } = req.body;
@@ -69,6 +90,7 @@ const deleteResult = async (req, res) => {
 };
 module.exports = {
   getResults,
+  getReportResultById,
   createResult,
   updateResult,
   deleteResult,

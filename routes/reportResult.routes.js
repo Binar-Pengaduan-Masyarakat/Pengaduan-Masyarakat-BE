@@ -13,6 +13,9 @@ router
   .put("/:resultId", reportResultController.updateResult)
 
   // DELETE reportResult by resultId
-  .delete("/:resultId", reportResultController.deleteResult);
+  .delete("/:resultId", reportResultController.deleteResult)
+
+  // GET reportResult by reportId
+  .get("/:reportId", reportResultController.getReportResultById);
 
 module.exports = router;
