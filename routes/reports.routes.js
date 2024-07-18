@@ -13,6 +13,9 @@ router
   .put("/:reportId", reports.updateReport)
 
   // DELETE report by reportId
-  .delete("/:reportId", reports.deleteReport);
+  .delete("/:reportId", reports.deleteReport)
+
+  // GET report by reportId
+  .get("/:reportId", reports.getReportById);
 
 module.exports = router;

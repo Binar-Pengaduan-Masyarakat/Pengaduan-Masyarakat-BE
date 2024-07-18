@@ -16,6 +16,27 @@ const getReports = async (req, res) => {
   }
 };
 
+const getReportById = async (req, res) => {
+  try {
+    const reportId = req.params.reportId;
+    const report = await reports.getReportByIdModel(reportId);
+
+    if (!report) {
+      return res.status(404).json({ message: "Report not found" });
+    }
+
+    res.json({
+      message: "Get Data Success",
+      data: report,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Get Data Failed",
+      error: error.message,
+    });
+  }
+};
+
 const addReport = async (req, res) => {
   try {
     // const userId = req.params.userId;
@@ -97,6 +118,7 @@ const deleteReport = async (req, res) => {
 
 module.exports = {
   getReports,
+  getReportById,
   addReport,
   updateReport,
   deleteReport,
