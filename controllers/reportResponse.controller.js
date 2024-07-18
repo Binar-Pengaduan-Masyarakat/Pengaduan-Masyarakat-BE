@@ -13,6 +13,22 @@ const getResponse = async (req, res) => {
     });
   }
 };
+
+const getResponseByReportId = async (req, res) => {
+  try {
+    const reportId = req.params.reportId;
+    const allresponse = await reportResponse.getResponseByReportId(reportId);
+    return res.json({
+      message: "Get Data Successfully",
+      data: allresponse,
+    });
+  } catch (error) {
+    return res.json({
+      message: "Get Data has Failed",
+    });
+  }
+};
+
 const createResponse = async (req, res) => {
   try {
     const allRespons = await reportResponse.getResponseModel();
@@ -70,6 +86,7 @@ const deleteResponse = async (req, res) => {
 };
 module.exports = {
   getResponse,
+  getResponseByReportId,
   createResponse,
   updateResponse,
   deleteResponse,

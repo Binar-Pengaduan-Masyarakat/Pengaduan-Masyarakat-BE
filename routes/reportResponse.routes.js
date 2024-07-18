@@ -13,6 +13,9 @@ route
   .put("/:responseId", reportResponseController.updateResponse)
 
   // DELETE reportResponse by responseId
-  .delete("/:responseId", reportResponseController.deleteResponse);
+  .delete("/:responseId", reportResponseController.deleteResponse)
+
+  // GET reportResponse by reportId
+  .get("/report/:reportId", reportResponseController.getResponseByReportId);
 
 module.exports = route;
