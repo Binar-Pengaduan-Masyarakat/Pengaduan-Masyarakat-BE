@@ -38,6 +38,15 @@ const getSameReporterCount = async (req, res) => {
   }
 };
 
+const getSameReportersCount = async (req, res) => {
+  try {
+    const count = await sameReporterModel.getSameReportersCount();
+    sendResponse(res, 200, { count });
+  } catch (error) {
+    handleError(res, error, "Failed to get Same Reporter count");
+  }
+};
+
 const deleteSameReporter = async (req, res) => {
   try {
     const { reportId } = req.params;
@@ -59,5 +68,6 @@ module.exports = {
   checkSameReporterConditions,
   postSameReporter,
   getSameReporterCount,
+  getSameReportersCount,
   deleteSameReporter,
 };

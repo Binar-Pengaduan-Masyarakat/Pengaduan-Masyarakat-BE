@@ -67,6 +67,16 @@ const getSameReporterCount = async (reportId) => {
   }
 };
 
+const getSameReportersCount = async () => {
+  try {
+    const count = await knex("SameReporter");
+    return count;
+  } catch (error) {
+    console.error("getSameReporterCount error:", error);
+    throw error;
+  }
+};
+
 const deleteSameReporter = async (reportId, userId) => {
   try {
     const deletedCount = await knex("SameReporter")
@@ -83,5 +93,6 @@ module.exports = {
   checkSameReporterConditions,
   createSameReporter,
   getSameReporterCount,
+  getSameReportersCount,
   deleteSameReporter,
 };

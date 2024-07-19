@@ -4,6 +4,9 @@ const authMiddleware = require("../middleware/auth.middleware");
 const router = express.Router();
 
 router
+  // GET all same reporters
+  .get("/count", sameReporterController.getSameReportersCount)
+
   // POST create a new same reporter
   .post("/:reportId", sameReporterController.postSameReporter)
 
