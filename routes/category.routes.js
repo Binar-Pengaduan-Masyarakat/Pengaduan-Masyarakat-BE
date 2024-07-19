@@ -5,10 +5,18 @@ const {
   getCategoryById,
   updateCategory,
   deleteCategory,
+  getUserCategory,
+  getUserCategoryById,
 } = require("../controllers/category.controller");
 const router = express.Router();
 
 router
+  // GET all category
+  .get("/user", getUserCategory)
+
+  // GET all category
+  .get("/user/:userId", getUserCategoryById)
+
   // GET all category
   .get("/", getAllCategory)
 

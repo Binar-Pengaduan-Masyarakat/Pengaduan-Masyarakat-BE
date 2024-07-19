@@ -12,6 +12,34 @@ const getAllCategory = async (req, res) => {
   }
 };
 
+const getUserCategory = async (req, res) => {
+  try {
+    const result = await knex.select("*").from("UserCategory");
+    res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching categories" });
+  }
+};
+
+const getUserCategoryById = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const result = await knex
+      .select("*")
+      .from("UserCategory")
+      .where("userId", userId);
+    res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching categories" });
+  }
+};
+
 const getCategoryById = async (req, res) => {
   const { categoryId } = req.params;
   try {
@@ -90,6 +118,8 @@ const deleteCategory = async (req, res) => {
 
 module.exports = {
   getAllCategory,
+  getUserCategory,
+  getUserCategoryById,
   getCategoryById,
   createCategory,
   updateCategory,
