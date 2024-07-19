@@ -39,19 +39,19 @@ const getReportById = async (req, res) => {
 
 const addReport = async (req, res) => {
   try {
-    // const userId = req.params.userId;
-    const allreports = await reports.getReportsModel();
-    const reportindex = allreports.length + 1;
-    const reportId = `UR${reportindex}`;
     const {
       reportContent,
-      reportImage,
       categoryId,
       userId,
       district,
       subdistrict,
       address,
     } = req.body;
+    const reportImage = req.file ? req.file.filename : null;
+
+    const allreports = await reports.getReportsModel();
+    const reportindex = allreports.length + 1;
+    const reportId = `UR${reportindex}`;
 
     const data = {
       reportId: reportId,
@@ -63,10 +63,11 @@ const addReport = async (req, res) => {
       subdistrict: subdistrict,
       address: address,
     };
+
     await reports.createReportsModel(data);
-    res.json(`Add Data Success with reportId is ${reportId} `);
+    res.json(`Add Data Success with reportId is ${reportId}`);
   } catch (error) {
-    res.json(`Add Data Faild you have issue like this ${error}`);
+    res.json(`Add Data Failed: ${error}`);
   }
 };
 
