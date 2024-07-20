@@ -4,7 +4,7 @@ require("dotenv").config();
 
 module.exports = class {
   static authenticate(req, res, next) {
-    const token = req.headers;
+    const token = req.cookies.token;
 
     if (!token) {
       return res.status(401).json({ message: "Authentication required" });
