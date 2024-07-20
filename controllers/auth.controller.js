@@ -142,19 +142,19 @@ module.exports = class {
       });
 
       res.cookie("token", token, { httpOnly: true });
-      res.status(201).json({ message: "Login success..!!" });
+      res.status(200).json({
+        token,
+        user: {
+          id: user.userId,
+          email: user.email,
+          name: user.name,
+          roles: user.roles,
+        }
+      });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   }
 
-  static async logout(req, res) {
-    try {
-      res.clearCookie("token");
-
-      res.redirect("/login");
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  }
+  
 };
