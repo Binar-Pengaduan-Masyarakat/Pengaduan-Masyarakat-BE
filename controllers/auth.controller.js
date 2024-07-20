@@ -17,6 +17,17 @@ module.exports = class {
   static async register(req, res) {
     try {
       const { name, email, password, roles } = req.body;
+      
+      let rooooles;
+
+      if (roles === 'INSTITUTION') {
+        rooooles = 'INSTITUTION';
+      } else if (roles === 'SUPERADMIN') {
+        rooooles = 'SUPERADMIN';
+      } else {
+        rooooles = 'USER';
+      }
+
       const hashedPassword = await bcrypt.hash(password, 10);
       const verificationToken = uuid.v4();
       await knex("User").insert({
@@ -24,7 +35,7 @@ module.exports = class {
         email,
         password: hashedPassword,
         isVerified: false,
-        roles: "USER",
+        roles: rooooles,
         verificationToken,
       });
 
