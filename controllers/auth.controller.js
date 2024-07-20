@@ -114,7 +114,8 @@ module.exports = class {
         .where("userId", user.userId)
         .update({ isVerified: true, verificationToken: null });
 
-      res.status(201).json({ message: "Email verified successfully." });
+      //res.status(201).json({ message: "successfully." });
+      res.redirect("http://localhost:5173/verificationSuccess");
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -141,20 +142,19 @@ module.exports = class {
       });
 
       res.cookie("token", token, { httpOnly: true });
-
-      res.status(201).json({ message: "Login success..!!" });
+      res.status(200).json({
+        token,
+        user: {
+          id: user.userId,
+          email: user.email,
+          name: user.name,
+          roles: user.roles,
+        }
+      });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   }
 
-  static async logout(req, res) {
-    try {
-      res.clearCookie("token");
-
-      res.redirect("/auth/login");
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  }
+  
 };
