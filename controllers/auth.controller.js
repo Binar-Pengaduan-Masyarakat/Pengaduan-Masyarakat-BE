@@ -78,7 +78,7 @@ module.exports = class {
           <body>
             <div class="container">
               <h2>Email Verification</h2>
-              <p>Dear user,</p>
+              <p>Dear ${name},</p>
               <p>To complete your registration, please click the following link to verify your email address:</p>
               <a href="${verificationLink}">Verify Email</a>
               <p>If you did not request this verification, please ignore this email.</p>
@@ -114,7 +114,7 @@ module.exports = class {
         .where("userId", user.userId)
         .update({ isVerified: true, verificationToken: null });
 
-      //res.status(201).json({ message: "successfully." });
+      // res.status(201).json({ message: "successfully." });
       res.redirect("http://localhost:5173/verificationSuccess");
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -149,12 +149,10 @@ module.exports = class {
           email: user.email,
           name: user.name,
           roles: user.roles,
-        }
+        },
       });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   }
-
-  
 };
