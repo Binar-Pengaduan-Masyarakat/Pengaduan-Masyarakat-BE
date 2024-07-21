@@ -7,16 +7,12 @@ const {
   deleteCategory,
   getUserCategory,
   getUserCategoryById,
+  assignUserCategory,
+  updateUserCategory,
 } = require("../controllers/category.controller");
 const router = express.Router();
 
 router
-  // GET all category
-  .get("/user", getUserCategory)
-
-  // GET all category
-  .get("/user/:userId", getUserCategoryById)
-
   // GET all category
   .get("/", getAllCategory)
 
@@ -30,6 +26,18 @@ router
   .put("/:categoryId", updateCategory)
 
   // DELETE category by categoryId
-  .delete("/:categoryId", deleteCategory);
+  .delete("/:categoryId", deleteCategory)
+
+  // GET all category for user
+  .get("/user", getUserCategory)
+
+  // GET category by userId
+  .get("/user/:userId", getUserCategoryById)
+
+  // POST assign category to user
+  .post("/user", assignUserCategory)
+
+  // PUT update user category
+  .put("/user", updateUserCategory);
 
 module.exports = router;

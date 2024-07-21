@@ -116,12 +116,38 @@ const deleteCategory = async (req, res) => {
   }
 };
 
+const assignUserCategory = async (req, res) => {
+  const { userId, categoryId } = req.body;
+  try {
+    const result = await knex("UserCategory").insert({ userId, categoryId });
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to assign user category" });
+  }
+};
+
+const updateUserCategory = async (req, res) => {
+  const { userId, categoryId } = req.body;
+  try {
+    const result = await knex("UserCategory")
+      .where({ userId })
+      .update({ categoryId });
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to update user category" });
+  }
+};
+
 module.exports = {
   getAllCategory,
   getUserCategory,
   getUserCategoryById,
   getCategoryById,
   createCategory,
+  updateUserCategory,
   updateCategory,
   deleteCategory,
+  assignUserCategory,
 };
