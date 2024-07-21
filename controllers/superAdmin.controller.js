@@ -56,7 +56,7 @@ const getAllInstitutions = async (req, res) => {
 
 const createInstitution = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, categoryId } = req.body;
     const createdAt = new Date();
     const roles = "INSTITUTION";
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -67,6 +67,10 @@ const createInstitution = async (req, res) => {
       roles,
       isVerified: true,
       createdAt,
+    });
+
+    const categorySubmit = await knex("UserCategory").insert({
+      userId,
     });
 
     if (result) {
@@ -117,8 +121,50 @@ const createInstitution = async (req, res) => {
   }
 };
 
+const assignUserCategory = async (req, res) => {
+  const { userId, categoryId } = req.body;
+  try {
+    const result = await knex("UserCategory").insert({ userId, categoryId });
+    if (result) {
+      res.status(200).json({ message: "Category assigned successfully" });
+    } else {
+      res.status(404).json({ message: "Category cant be assigned" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to assign user category" });
+  }
+};
+
+const updateUserCategory = async (req, res) => {
+  const { userId, categoryId } = req.body;
+
+  if (!userId || !categoryId) {
+    return res
+      .status(400)
+      .json({ message: "userId and categoryId are required" });
+  }
+
+  try {
+    const result = await knex("UserCategory")
+      .where({ userId })
+      .update({ categoryId });
+
+    if (result) {
+      res.status(200).json({ message: "Category updated successfully" });
+    } else {
+      res.status(404).json({ message: "Category cannot be updated" });
+    }
+  } catch (error) {
+    console.error("Error updating user category:", error);
+    res.status(500).json({ error: "Failed to update user category" });
+  }
+};
+
 module.exports = {
   getAllUsers,
   getAllInstitutions,
   createInstitution,
+  assignUserCategory,
+  updateUserCategory,
 };
