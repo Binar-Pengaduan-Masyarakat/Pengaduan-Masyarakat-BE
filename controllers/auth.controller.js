@@ -42,7 +42,7 @@ module.exports = class {
       const verificationLink = `${process.env.EMAIL_VERIFICATION_URL}/api/auth/verify-email?token=${verificationToken}`;
 
       await transporter.sendMail({
-        from: "Admin Pengaduan Masyarakat",
+        from: "Admin Pengaduan Masyarakat <noreply@pengaduanmasyarakat.blog>",
         to: email,
         subject: "Verify Your Email Address",
         html: `

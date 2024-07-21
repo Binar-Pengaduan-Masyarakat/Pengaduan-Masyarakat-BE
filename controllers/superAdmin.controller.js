@@ -81,7 +81,7 @@ const createInstitution = async (req, res) => {
 
     if (insertedUser) {
       await transporter.sendMail({
-        from: "Admin Pengaduan Masyarakat <noreply@pengaduanmasyarakat.com>",
+        from: "Admin Pengaduan Masyarakat <noreply@pengaduanmasyarakat.blog>",
         to: email,
         subject: "Institution Created",
         html: `
