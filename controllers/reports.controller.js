@@ -10,7 +10,7 @@ const getReports = async (req, res) => {
     });
   } catch (error) {
     return res.json({
-      message: "Get Data Feild",
+      message: "Get Data Failed",
       data: {},
     });
   }
@@ -94,11 +94,11 @@ const updateReport = async (req, res) => {
     };
     await reports.updateReportModel(reportId, data);
     res.json({
-      message: `Data Report with ReportId is ${reportId} Success Update`,
+      message: `Data Report with ReportId is ${reportId} Successfully Updated`,
     });
   } catch (error) {
     res.json({
-      message: "Data Field Update",
+      message: "Data Update Failed",
     });
   }
 };

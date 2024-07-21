@@ -1,14 +1,5 @@
 const institutionService = require("../services/institution.services");
 
-// const createInstitution = async (req, res) => {
-//   try {
-//     const institution = await institutionService.createInstitution(req.body);
-//     res.status(201).json(institution);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
-
 const getAllInstitutions = async (req, res) => {
   try {
     const institutions = await institutionService.getAllInstitutions();
@@ -48,12 +39,24 @@ const getInstitutionById = async (req, res) => {
 
 const updateInstitution = async (req, res) => {
   try {
-    const institution = await institutionService.updateInstitution(
-      req.params.userId,
-      req.body
+    const userId = req.params.userId;
+    const { name, address, contact } = req.body;
+    const institutionImage = req.file ? req.file.filename : null;
+
+    const updatedData = {
+      name,
+      address,
+      contact,
+      image: institutionImage, // Assuming you want to store the image filename
+    };
+
+    const updatedInstitution = await institutionService.updateInstitution(
+      userId,
+      updatedData
     );
     const { password, verificationToken, ...institutionWithoutSensitiveData } =
-      institution;
+      updatedInstitution;
+
     res.json(institutionWithoutSensitiveData);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -70,7 +73,6 @@ const deleteInstitution = async (req, res) => {
 };
 
 module.exports = {
-  // createInstitution,
   getAllInstitutions,
   getInstitutionById,
   updateInstitution,

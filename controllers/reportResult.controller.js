@@ -17,7 +17,7 @@ const getResults = async (req, res) => {
 const getReportResultById = async (req, res) => {
   try {
     const resultId = req.params.reportId;
-    const result = await reportResult.getReportResultByIdModel(resultId); // Assuming you have this function in your model
+    const result = await reportResult.getReportResultByIdModel(resultId);
     if (result) {
       res.json({
         message: "Get Data Successfully",
@@ -37,13 +37,16 @@ const getReportResultById = async (req, res) => {
 
 const createResult = async (req, res) => {
   try {
-    const { reportId, userId, resultContent, resultImage } = req.body;
+    const { reportId, userId, resultContent } = req.body;
+    const resultImage = req.file ? req.file.filename : null;
+
     const data = {
       reportId: reportId,
       userId: userId,
       resultContent: resultContent,
       resultImage: resultImage,
     };
+
     await reportResult.createResultModel(data);
     return res.json({
       message: "Data Added Successfully",
@@ -58,19 +61,22 @@ const createResult = async (req, res) => {
 const updateResult = async (req, res) => {
   try {
     const resultId = req.params.resultId;
-    const { userId, resultContent, resultImage } = req.body;
+    const { userId, resultContent } = req.body;
+    const resultImage = req.file ? req.file.filename : null;
+
     const data = {
       userId: userId,
       resultContent: resultContent,
       resultImage: resultImage,
     };
+
     await reportResult.updateResultModel(resultId, data);
     return res.json({
       message: "Data Updated Successfully",
     });
   } catch (error) {
     return res.json({
-      message: "Data Failed to be Added",
+      message: "Data Failed to be Updated",
     });
   }
 };
@@ -88,6 +94,7 @@ const deleteResult = async (req, res) => {
     });
   }
 };
+
 module.exports = {
   getResults,
   getReportResultById,

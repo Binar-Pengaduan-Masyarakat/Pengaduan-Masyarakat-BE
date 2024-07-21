@@ -10,12 +10,13 @@ const upload = multer({
       cb(null, path.join(__dirname, "../public/reports"));
     },
     filename: function (req, file, cb) {
-      const newFileName = `report_${Date.now()}_${file.originalname}`;
+      const ext = path.extname(file.originalname);
+      const newFileName = `report_${Date.now()}${ext}`;
       cb(null, newFileName);
     },
   }),
   fileFilter: function (req, file, cb) {
-    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
       return cb(new Error("Only image files are allowed!"));
     }
     cb(null, true);
@@ -23,19 +24,19 @@ const upload = multer({
 });
 
 router
-  // GET all reports
-  .get("/", reports.getReports)
-
-  // POST create report
-  .post("/", upload.single("reportImage"), reports.addReport)
+  // GET report by reportId
+  .get("/:reportId", reports.getReportById)
 
   // PUT update report by reportId
-  .put("/:reportId", reports.updateReport)
+  .put("/:reportId", upload.single("reportImage"), reports.updateReport)
 
   // DELETE report by reportId
   .delete("/:reportId", reports.deleteReport)
 
-  // GET report by reportId
-  .get("/:reportId", reports.getReportById);
+  // POST create report
+  .post("/", upload.single("reportImage"), reports.addReport)
+
+  // GET all reports
+  .get("/", reports.getReports);
 
 module.exports = router;

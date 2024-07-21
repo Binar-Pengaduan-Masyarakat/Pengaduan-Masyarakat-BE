@@ -1,4 +1,6 @@
 const userService = require("../services/user.services");
+const fs = require("fs");
+const path = require("path");
 
 const getUserProfile = async (req, res) => {
   try {
@@ -21,26 +23,37 @@ const getUserProfile = async (req, res) => {
   }
 };
 
-// const createUserProfile = async (req, res) => {
-//   try {
-//     const newUser = await userService.createUser(req.body);
-//     res
-//       .status(201)
-//       .json({ message: "User profile created successfully.", data: newUser });
-//   } catch (error) {
-//     console.error("Failed to create user profile:", error);
-//     res
-//       .status(500)
-//       .json({ message: "Internal server error while creating user profile." });
-//   }
-// };
-
 const updateUserProfile = async (req, res) => {
   try {
-    const updatedUser = await userService.updateUser(
-      req.params.userId,
-      req.body
-    );
+    const { userId } = req.params;
+    const updatedData = { ...req.body };
+    console.log(req.body);
+
+    if (req.file) {
+      const newImagePath = req.file.filename;
+
+      const currentUser = await userService.getUserById(userId);
+      if (!currentUser) {
+        return res.status(404).json({
+          message: "User not found. Please check the user ID and try again.",
+        });
+      }
+
+      if (currentUser.userImage) {
+        const oldImagePath = path.join(
+          __dirname,
+          "../public/profiles",
+          currentUser.userImage
+        );
+        fs.unlink(oldImagePath, (err) => {
+          if (err) console.error("Failed to delete old profile image:", err);
+        });
+      }
+
+      updatedData.userImage = newImagePath;
+    }
+
+    const updatedUser = await userService.updateUser(userId, updatedData);
     if (!updatedUser) {
       return res.status(404).json({
         message: "User not found. Please check the user ID and try again.",
@@ -73,7 +86,6 @@ const deleteUserProfile = async (req, res) => {
 
 module.exports = {
   getUserProfile,
-  // createUserProfile,
   updateUserProfile,
   deleteUserProfile,
 };

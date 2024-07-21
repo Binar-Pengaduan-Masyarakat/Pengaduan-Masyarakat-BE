@@ -15,9 +15,11 @@ const getReportResultByIdModel = async (id) => {
 const createResultModel = async (data) => {
   return await knex("ReportResult").insert(data).returning("*");
 };
+
 const updateResultModel = async (id, data) => {
   return await knex("ReportResult").where({ resultId: id }).update(data);
 };
+
 const deleteResultModel = async (id) => {
   return await knex("ReportResult").where({ resultId: id }).del();
 };
