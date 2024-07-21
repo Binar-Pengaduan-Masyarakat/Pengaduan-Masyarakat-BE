@@ -56,26 +56,32 @@ const getAllInstitutions = async (req, res) => {
 
 const createInstitution = async (req, res) => {
   try {
-    const { name, email, password, categoryId } = req.body;
+    const { name, email, password } = req.body;
+    if (!name || !email || !password) {
+      return res
+        .status(400)
+        .json({ error: "Name, email, and password are required" });
+    }
+
     const createdAt = new Date();
     const roles = "INSTITUTION";
     const hashedPassword = await bcrypt.hash(password, 10);
-    const result = await knex("User").insert({
-      name,
-      email,
-      password: hashedPassword,
-      roles,
-      isVerified: true,
-      createdAt,
-    });
 
-    const categorySubmit = await knex("UserCategory").insert({
-      userId,
-    });
+    // Insert user into the database and get the inserted userId
+    const [insertedUser] = await knex("User")
+      .insert({
+        name,
+        email,
+        password: hashedPassword,
+        roles,
+        isVerified: true,
+        createdAt,
+      })
+      .returning(["userId"]); // Ensure this is supported by your database
 
-    if (result) {
+    if (insertedUser) {
       await transporter.sendMail({
-        from: "Admin Pengaduan Masyarakat <noreply@pengaduanmasyarakat.com>", // Add noreply email
+        from: "Admin Pengaduan Masyarakat <noreply@pengaduanmasyarakat.com>",
         to: email,
         subject: "Institution Created",
         html: `
@@ -114,7 +120,7 @@ const createInstitution = async (req, res) => {
       res.status(400).json({ message: "Failed to create Institution" });
     }
   } catch (error) {
-    console.log(error);
+    console.error("Error creating institution:", error);
     res
       .status(500)
       .json({ error: "An error occurred while creating Institution" });
