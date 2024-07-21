@@ -17,15 +17,15 @@ module.exports = class {
   static async register(req, res) {
     try {
       const { name, email, password, roles } = req.body;
-      
+
       let rooooles;
 
-      if (roles === 'INSTITUTION') {
-        rooooles = 'INSTITUTION';
-      } else if (roles === 'SUPERADMIN') {
-        rooooles = 'SUPERADMIN';
+      if (roles === "INSTITUTION") {
+        rooooles = "INSTITUTION";
+      } else if (roles === "SUPERADMIN") {
+        rooooles = "SUPERADMIN";
       } else {
-        rooooles = 'USER';
+        rooooles = "USER";
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -42,7 +42,7 @@ module.exports = class {
       const verificationLink = `${process.env.EMAIL_VERIFICATION_URL}/api/auth/verify-email?token=${verificationToken}`;
 
       await transporter.sendMail({
-        from: "Admin Pengaduan Masyarakat <noreply@pengaduanmasyarakat.com>", // Add noreply email
+        from: "Admin Pengaduan Masyarakat",
         to: email,
         subject: "Verify Your Email Address",
         html: `
@@ -126,7 +126,7 @@ module.exports = class {
         .update({ isVerified: true, verificationToken: null });
 
       // res.status(201).json({ message: "successfully." });
-      res.redirect("http://localhost:5173/verificationSuccess");
+      res.redirect(`${process.env.FRONTEND_URL}/verificationSuccess`);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

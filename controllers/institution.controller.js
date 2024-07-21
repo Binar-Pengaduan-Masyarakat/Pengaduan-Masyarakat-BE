@@ -40,14 +40,13 @@ const getInstitutionById = async (req, res) => {
 const updateInstitution = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const { name, address, contact } = req.body;
+    const { name, categoryId } = req.body;
     const institutionImage = req.file ? req.file.filename : null;
 
     const updatedData = {
       name,
-      address,
-      contact,
-      image: institutionImage, // Assuming you want to store the image filename
+      categoryId,
+      image: institutionImage,
     };
 
     const updatedInstitution = await institutionService.updateInstitution(
