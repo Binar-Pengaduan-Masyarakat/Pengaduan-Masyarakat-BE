@@ -40,12 +40,11 @@ const getInstitutionById = async (req, res) => {
 const updateInstitution = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const { name, categoryId } = req.body;
+    const { name } = req.body;
     const institutionImage = req.file ? req.file.filename : null;
 
     const updatedData = {
       name,
-      categoryId,
       image: institutionImage,
     };
 
