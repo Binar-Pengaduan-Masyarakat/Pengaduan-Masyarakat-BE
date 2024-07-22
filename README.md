@@ -27,7 +27,7 @@ Serta API Routing yang telah di setting atau di atur sedemikian rupa agar dapat 
 Dilengkapi dengan beberapa `middleware` yaitu `authenticate` dan `checkUserExit`.
 
 ```
-Server Terbuat dari : `Express.Js`
+Server dibuat dengan : `Node.js, Express.Js`
 Tipe Database : `Postgres SQL`
 Tipe querybuilder : `knex.js`
 Tipe testing Backend : `Jest`
