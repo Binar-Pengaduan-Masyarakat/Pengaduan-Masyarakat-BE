@@ -23,8 +23,8 @@ Server Pengaduan Masyarakat ini berisikan banyak logic yang dimana logicnya anta
 
 ...
 
-Serta API Routing yang telah di setting atau di atur sedemikian rupa agar dapat dipakai oleh sistem yang akan menggunakannya.
-dilengkapi dengan beberapa `middleware` yaitu `authenticate` dan `checkUserExit`.
+Serta API Routing yang telah di setting atau di atur sedemikian rupa agar dapat dipakai oleh sistem yang akan menggunakannya yang dimana dokumentasi APInya dapat dilihat pada link diatas.
+Dilengkapi dengan beberapa `middleware` yaitu `authenticate` dan `checkUserExit`.
 
 ```
 Server Terbuat dari : `Express.Js`
