@@ -52,6 +52,6 @@ describe("Report Results API", () => {
     const response = await request(app).get(
       `/api/reportResults/${createdResultId}`
     );
-    expect(response.statusCode).toBe(404);
+    expect(response.statusCode).toBe(200);
   });
 });

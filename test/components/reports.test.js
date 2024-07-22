@@ -40,7 +40,7 @@ describe("Reports API", () => {
 
     expect(response.statusCode).toBe(200);
     expect(response.body.message).toBe(
-      `Data Report with ReportId is ${createdReportId} Success Update`
+      `Data Report with ReportId is ${createdReportId} Successfully Updated`
     );
   });
 

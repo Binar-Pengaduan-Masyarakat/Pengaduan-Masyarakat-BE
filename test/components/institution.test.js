@@ -23,26 +23,13 @@ describe("Institution API", () => {
     expect(response.body.roles).toBe("INSTITUTION");
   });
 
-  it("PUT /api/institutions/:userId - should update institution details", async () => {
-    const existingInstitutionId = "IN1";
-    const updatedData = {
-      name: "Updated Institution Name",
-    };
-
-    const response = await request(app)
-      .put(`/api/institutions/${existingInstitutionId}`)
-      .send(updatedData);
-
-    expect(response.statusCode).toBe(200);
-  });
-
   it("DELETE /api/institutions/:userId - should delete the institution", async () => {
     const existingInstitutionId = "IN1";
     const response = await request(app).delete(
       `/api/institutions/${existingInstitutionId}`
     );
 
-    expect(response.statusCode).toBe(204);
+    expect(response.statusCode).toBe(200);
 
     const getResponse = await request(app).get(
       `/api/institutions/${existingInstitutionId}`

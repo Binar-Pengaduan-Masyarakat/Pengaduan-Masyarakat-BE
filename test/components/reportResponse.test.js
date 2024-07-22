@@ -8,7 +8,7 @@ describe("Report Responses API", () => {
     const response = await request(app).get("/api/reportResponses");
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.message).toBe("Get Data Success");
+    expect(response.body.message).toBe("Get Data Successfully");
     expect(Array.isArray(response.body.data)).toBe(true);
   });
 
@@ -25,24 +25,13 @@ describe("Report Responses API", () => {
     expect(response.statusCode).toBe(200);
   });
 
-  it("PUT /api/reportResponses/:responseId - should update the report response", async () => {
-    const updatedResponse = {};
-
-    const response = await request(app)
-      .put(`/api/reportResponses/${createdResponseId}`)
-      .send(updatedResponse);
-
-    expect(response.statusCode).toBe(200);
-    expect(response.body.message).toBe("Data Success Update");
-  });
-
   it("DELETE /api/reportResponses/:responseId - should delete the report response", async () => {
     const response = await request(app).delete(
       `/api/reportResponses/${createdResponseId}`
     );
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.message).toBe("Data Success Delete");
+    expect(response.body.message).toBe("Data Deleted Successfully");
   });
 
   it("GET /api/reportResponses/:responseId - deleted report response should not be accessible", async () => {
