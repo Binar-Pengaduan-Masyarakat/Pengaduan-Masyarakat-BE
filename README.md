@@ -28,12 +28,8 @@ dilengkapi dengan beberapa `middleware` yaitu `authenticate` dan `checkUserExit`
 
 ```
 Server Terbuat dari : `Express.Js`
-
 Tipe Database : `Postgres SQL`
-
-tipe querybuilder : `knex.js`
-
-tipe testing Backend : `Jest`
-
-tipe enkripsi key : `bycript`
+Tipe querybuilder : `knex.js`
+Tipe testing Backend : `Jest`
+Tipe enkripsi key : `bycript`
 ```
