@@ -54,6 +54,72 @@ const getAllInstitutions = async (req, res) => {
   }
 };
 
+const createSuperAdmin = async (req, res) => {
+  try {
+    const { name } = req.body;
+    if (!name) {
+      return res.status(400).json({ error: "Name is required" });
+    }
+
+    const createdAt = new Date();
+    const roles = "SUPERADMIN";
+    const email = process.env.SUPERADMIN_EMAIL;
+    const hashedPassword = await bcrypt.hash(process.env.SUPERADMIN_PASSWORD, 10);
+
+    const [insertedUser] = await knex("User")
+      .insert({
+        name,
+        email,
+        password: hashedPassword,
+        roles,
+        isVerified: true,
+        createdAt,
+      })
+      .returning(["userId"]);
+
+    if (insertedUser) {
+      await transporter.sendMail({
+        from: "Admin Pengaduan Masyarakat <noreply@pengaduanmasyarakat.blog>",
+        to: email,
+        subject: "Super Admin Created",
+        html: `
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Super Admin Created</title>
+          </head>
+          <body>
+            <div class="container">
+              <h2>Super Admin Created</h2>
+              <p>Dear ${name},</p>
+              <p>Your Super Admin account has been created successfully.</p>
+              <p>Your login credentials are:</p>
+              <ul>
+                <li>Email: ${email}</li>
+                <li>Password: ${process.env.SUPERADMIN_PASSWORD}</li>
+              </ul>
+              <p>Please keep this information safe.</p>
+              <p>Best regards,</p>
+              <p>Pengaduan Masyarakat</p>
+              <p style="font-size: 12px; color: #999;">Please do not reply to this email.</p>
+            </div>
+          </body>
+          </html>
+        `,
+      });
+
+      res.status(201).json({ message: "Super Admin created successfully" });
+    } else {
+      res.status(400).json({ message: "Failed to create Super Admin" });
+    }
+  } catch (error) {
+    console.error("Error creating Super Admin:", error);
+    res.status(500).json({ error: "An error occurred while creating Super Admin" });
+  }
+};
+
 const createInstitution = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -67,7 +133,6 @@ const createInstitution = async (req, res) => {
     const roles = "INSTITUTION";
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert user into the database and get the inserted userId
     const [insertedUser] = await knex("User")
       .insert({
         name,
@@ -77,7 +142,7 @@ const createInstitution = async (req, res) => {
         isVerified: true,
         createdAt,
       })
-      .returning(["userId"]); // Ensure this is supported by your database
+      .returning(["userId"]);
 
     if (insertedUser) {
       await transporter.sendMail({
@@ -91,9 +156,6 @@ const createInstitution = async (req, res) => {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Institution Created</title>
-            <style>
-              /* Same styles as above */
-            </style>
           </head>
           <body>
             <div class="container">
@@ -170,6 +232,7 @@ const updateUserCategory = async (req, res) => {
 module.exports = {
   getAllUsers,
   getAllInstitutions,
+  createSuperAdmin,
   createInstitution,
   assignUserCategory,
   updateUserCategory,

@@ -2,6 +2,7 @@ const express = require("express");
 const {
   getAllUsers,
   getAllInstitutions,
+  createSuperAdmin,
   createInstitution,
   assignUserCategory,
   updateUserCategory,
@@ -10,6 +11,9 @@ const {
 const router = express.Router();
 
 router
+  // POST create superadmin
+  .post("/", createSuperAdmin)
+
   // GET All users listing
   .get("/users", getAllUsers)
 
